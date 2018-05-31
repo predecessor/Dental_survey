@@ -4,6 +4,10 @@ ui <- fluidPage(
     list(
       div(class = "page",
           id = paste0("step", 1),
+          column(12,align="center",tags$h1("Dental App")),
+          fluidRow(
+            column(12, align="center",tags$h3("If you need further information about the project, visit:",tags$a(href="http://advocateoralhealth.com/","Advocate Project")))
+          ),
           sidebarLayout(
             sidebarPanel(
               sliderInput("var1",labelMandatory("how many times do you brush your teeth per week?"),0,56,1,ticks=FALSE),

@@ -68,7 +68,10 @@ assign_blocks <- function(n) {
 
 #alts <- assign_block(n)
 
-n <- nrow(dat.frame)
+#n <- nrow(dat.frame)
+set.seed(Sys.time())
+n<-sample(1:100,1)
+print(n)
 alts <- assign_blocks(n)
 
 server <- function(input, output, session) {
