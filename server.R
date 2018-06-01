@@ -133,8 +133,12 @@ server <- function(input, output, session) {
       geom_vline(xintercept = input$var2*input$min_floss,linetype="dashed",colour="blue")
   })
   
+  graph.data<-reactive({
+  input$var1*input$min_brush+input$var2*input$min_floss
+  })
+  
   output$message <- renderPrint({
-    if (input$var1*input$min_brush+input$var2*input$min_floss < quantile(dat.frame.new$both_intensities,prob=0.5)) {
+    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.5)})) {
      print("You belong to the 50 percent LEAST preventive people")
     }
     else {
@@ -221,12 +225,21 @@ server <- function(input, output, session) {
   
   output$likert_plot <- renderPlot({
     likert_frame <- dat.frame[, grepl("likert", names(dat.frame))]
-    likert_frame[,1:19] <- lapply(likert_frame[,1:19], function(x) factor(x, levels = likert_choices))
-    likert_frame[,20:23] <- lapply(likert_frame[ ,20:23], function(x) factor(x, levels = levelanx_choices))
+    likert_frame[ ,1:19] <- lapply(likert_frame[,1:19], function(x) factor(x, levels = likert_choices))
+    
     names(likert_frame) <- likert_questions
     
-    likert_summ <- likert(likert_frame)
+    likert_summ <- likert(likert_frame[ ,1:19])
     plot(likert_summ, group.order = likert_questions)
+  })
+  
+  output$Anx_plot<-renderPlot({
+    Anx_frame <- dat.frame[, grepl("likert", names(dat.frame))] 
+    Anx_frame[ ,1:4] <- lapply(Anx_frame[ ,20:23], function(x) factor(x, levels = levelanx_choices))
+    names(Anx_frame)<- Anx_questions
+    
+    Anx_summ<-likert(Anx_frame[ ,1:4])
+    plot(Anx_summ, group.order=Anx_questions)
   })
   
   

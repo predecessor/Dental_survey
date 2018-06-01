@@ -36,7 +36,8 @@ source("likertQuestions.R")
 
 NUM_PAGES <- 5
 
-likert_questions <- paste("Question", 1:23)
+likert_questions <- paste("Question", 1:19)
+Anx_questions<-paste("Question", 1:4)
 
 
 likert_choices <- c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree")
@@ -71,6 +72,7 @@ responses_df <- do.call(what = rbind, args = list_responses)
 
 dat.frame<-as.data.frame(responses_df)
 dat.frame
+
 dat.frame.new<-mutate(dat.frame,brushing_intensity=dat.frame$var1*dat.frame$min_brush,flossing_intensity=dat.frame$var2*dat.frame$min_floss,both_intensities=dat.frame$var1*dat.frame$min_brush+dat.frame$var2*dat.frame$min_floss)
 quantile(dat.frame.new$both_intensities,prob=0.5)
 

@@ -4,7 +4,7 @@ ui <- fluidPage(
     list(
       div(class = "page",
           id = paste0("step", 1),
-          column(12,align="center",tags$h1("Dental App")),
+          column(12,align="center",tags$h1("General Public App")),
           fluidRow(
             column(12, align="center",tags$h3("If you need further information about the project, visit:",tags$a(href="http://advocateoralhealth.com/","Advocate Project")))
           ),
@@ -49,6 +49,7 @@ ui <- fluidPage(
       ),
       div(class = "page",
           id = paste0("step", 2),
+          column(12,align="left",tags$h1("First set of choices")),
           choiceDataTableUI("one"),
           choiceDataTableUI("two"),
           choiceDataTableUI("three"),
@@ -56,6 +57,7 @@ ui <- fluidPage(
       ),
       div(class = "page",
           id = paste0("step", 3),
+          column(12,align="left",tags$h1("Second set of choices")),
           choiceDataTableUI("five"),
           choiceDataTableUI("six"),
           choiceDataTableUI("seven"),
@@ -63,6 +65,7 @@ ui <- fluidPage(
       ),
       div(class = "page",
           id = paste0("step", 4),
+          column(12,align="left",tags$h1("Some questions")),
           fluidPage(
             column(12, align = "center",
                    div(
@@ -87,10 +90,12 @@ ui <- fluidPage(
                    )))),
       div(class = "page",
           id = paste0("step", 5),
+          
           fluidPage(
+            
             column(12, align = "center",
                    div(
-                     id = "levelanx_input",
+                     id = "levelanx_input", column(12,align="left",tags$h1("Some additional questions")),
                      likertQuestionsInput("levelanx", questions=c("If you went to your dentist for treatment tomorrow, how would you feel?",
                                                                   "If you were sitting in the waiting room (waiting for treatment), how would you feel?",
                                                                   "If you were about to have a tooth drilled, how would you feel?",
@@ -106,7 +111,8 @@ ui <- fluidPage(
                      div(
                        id = "thankyou_msg",
                        h3("Thanks, your response was submitted successfully!"),
-                       plotOutput("likert_plot")
+                       plotOutput("likert_plot"),
+                       plotOutput("Anx_plot")
                      )
                    )
             )
