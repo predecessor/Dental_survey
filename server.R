@@ -1,76 +1,91 @@
-cand <- dcm.design.gencand(c(3,3,4,4,4,4,4))
-colnames(cand)<-c("dental check up cost","transport time","Amount of dietary advice","Amount of hygiene advice", "Amount of fluoride varnish delivery", "Waiting time for the appointment","Dental advice provided by")
+#cand <- dcm.design.gencand(c(3,3,4,4,4,4,4))
+#colnames(cand)<-c("dental check up cost","transport time","Amount of dietary advice","Amount of hygiene advice", "Amount of fluoride varnish delivery", "Waiting time for the appointment","Dental advice provided by")
 
-set.seed(1)
-des <- dcm.design.cand(cand,2,8,2)
-des$levels
+#set.seed(1)
+#des <- dcm.design.cand(cand,9,8,2)
+#des$levels
 
-cal_1<-function (data){
-  fact1<-as.factor(data[ ,4])
-  levels(fact1)<-c("20","50","100")
-  fact2<-as.factor(data[ ,5])
-  levels(fact2)<-c("0 mins","15 mins","30 mins","45 mins")
-  fact3<-as.factor(data[ ,6])
-  levels(fact3)<-c("0 mins","3 mins","6 mins", "9 mins")
-  fact4<-as.factor(data[ ,7])
-  levels(fact4)<-c("0 mins","3 mins","6 mins","12 mins")
-  fact5<-as.factor(data[ ,8])
-  levels(fact5)<-c("0 mins","3 mins","5 mins","7.5 mins")
-  fact6<-as.factor(data[ ,9])
-  levels(fact6)<-c("0 days","1 day","10 days","15 days")
-  fact7<-as.factor(data[ ,8])
-  levels(fact7)<-c("dentist","dental hygienist","dental therapist","dental nurse")
+#cal_1<-function (data){
+#  fact1<-as.factor(data[ ,4])
+#  levels(fact1)<-c("20","50","100")
+#  fact2<-as.factor(data[ ,5])
+#  levels(fact2)<-c("0 mins","15 mins","30 mins","45 mins")
+#  fact3<-as.factor(data[ ,6])
+#  levels(fact3)<-c("0 mins","3 mins","6 mins", "9 mins")
+#  fact4<-as.factor(data[ ,7])
+#  levels(fact4)<-c("0 mins","3 mins","6 mins","12 mins")
+#  fact5<-as.factor(data[ ,8])
+#  levels(fact5)<-c("0 mins","3 mins","5 mins","7.5 mins")
+#  fact6<-as.factor(data[ ,9])
+#  levels(fact6)<-c("0 days","1 day","10 days","15 days")
+#  fact7<-as.factor(data[ ,8])
+#  levels(fact7)<-c("dentist","dental hygienist","dental therapist","dental nurse")
   
-  cbind(as.data.frame(fact1),as.data.frame(fact2),as.data.frame(fact3),as.data.frame(fact4),as.data.frame(fact5),as.data.frame(fact6),as.data.frame(fact7))
-}
+#  cbind(as.data.frame(fact1),as.data.frame(fact2),as.data.frame(fact3),as.data.frame(fact4),as.data.frame(fact5),as.data.frame(fact6),as.data.frame(fact7))
+#}
 
-data_sets<-cal_1(des$levels)
-
-
-df<-cbind(des$levels[,1:3],data_sets)
-colnames(df)<-c("card","vers","task","dental check up cost","transport time","Amount of dietary advice","Amount of hygiene advice", "Amount of fluoride varnish delivery", "Waiting time for the appointment","Dental advice provided by")
-
-dat<-split(df, (seq(nrow(df))-1) %/% 16) 
-names(dat)<-c("block1","block2")
+#data_sets<-cal_1(des$levels)
 
 
-for (i in 1:2){ 
-  #dat[[i]]<-t(as.data.frame(dat[[i]]))
-  dat[[i]]<-split(dat[[i]],(seq(nrow(dat[[i]]))-1) %/% 2)
-}
+#df<-cbind(des$levels[,1:3],data_sets)
+#colnames(df)<-c("card","vers","task","dental check up cost","transport time","Amount of dietary advice","Amount of hygiene advice", "Amount of fluoride varnish delivery", "Waiting time for the appointment","Dental advice provided by")
+
+#dat<-split(df, (seq(nrow(df))-1) %/% 16) 
+#names(dat)<-c("block1","block2","block3","block4","block5","block6","block7","block8","block9")
 
 
-data_read<-lapply(dat, function(x) t(as.data.frame(x)))
-data_read1<-as.data.frame(data_read)
-data_read_choices_block1<-split(data_read1[ ,1:2],(seq(nrow(data_read1[ ,1:2]))-1) %/% 10)
-data_read_choices_block2<-split(data_read1[ ,3:4],(seq(nrow(data_read1[ ,3:4]))-1) %/% 10)
+#for (i in 1:9){ 
+  
+#  dat[[i]]<-split(dat[[i]],(seq(nrow(dat[[i]]))-1) %/% 2)
+#}
 
-Choice_scenarios_for_each_block_sep<-function (data){ 
-  for (i in 1:8){ 
-    rownames(data[[i]])<-c("card","vers","task","Cost of a dental check-up","Transport time to reach the practice","Amount of dietary advice","Amount of hygiene advice", "Amount of fluoride varnish delivery", "Waiting time for the appointment","Dental advice provided by")
-    colnames(data[[i]])<-c("Dental Practice 1","Dental Practice 2")
-    data[[i]]<-data[[i]][-c(1,2,3),]
-  }
-  data
-}
+
+#data_read<-lapply(dat, function(x) t(as.data.frame(x)))
+#data_read1<-as.data.frame(data_read)
+
+#data_read_choices_block1<-split(data_read1[ ,1:2],(seq(nrow(data_read1[ ,1:2]))-1) %/% 10)
+#data_read_choices_block2<-split(data_read1[ ,3:4],(seq(nrow(data_read1[ ,3:4]))-1) %/% 10)
+#data_read_choices_block3<-split(data_read1[ ,5:6],(seq(nrow(data_read1[ ,5:6]))-1) %/% 10)
+#data_read_choices_block4<-split(data_read1[ ,7:8],(seq(nrow(data_read1[ ,7:8]))-1) %/% 10)
+#data_read_choices_block5<-split(data_read1[ ,9:10],(seq(nrow(data_read1[ ,9:10]))-1) %/% 10)
+#data_read_choices_block6<-split(data_read1[ ,11:12],(seq(nrow(data_read1[ ,11:12]))-1) %/% 10)
+#data_read_choices_block7<-split(data_read1[ ,13:14],(seq(nrow(data_read1[ ,13:14]))-1) %/% 10)
+#data_read_choices_block8<-split(data_read1[ ,15:16],(seq(nrow(data_read1[ ,15:16]))-1) %/% 10)
+#data_read_choices_block9<-split(data_read1[ ,17:18],(seq(nrow(data_read1[ ,17:18]))-1) %/% 10)
+
+#Choice_scenarios_for_each_block_sep<-function (data){ 
+# for (i in 1:8){ 
+#    rownames(data[[i]])<-c("card","vers","task","Cost of a dental check-up","Transport time to reach the practice","Amount of dietary advice","Amount of hygiene advice", "Amount of fluoride varnish delivery", "Waiting time for the appointment","Dental advice provided by")
+#    colnames(data[[i]])<-c("Dental Practice 1","Dental Practice 2")
+#    data[[i]]<-data[[i]][-c(1,2,3),]
+#  }
+#  data
+#}
+
 
 assign_blocks <- function(n) {
   #r <- runif(1)
   #if(r > 0.5) {
-  if(n %% 2 == 0) {
-    return(Choice_scenarios_for_each_block_sep(data_read_choices_block1))
-  } else {
-    return(Choice_scenarios_for_each_block_sep(data_read_choices_block2))
+  if(n == 1) {
+    return(readRDS("model1.data.rds"))
+  }else if(n==2) {
+    return(readRDS("model2.data.rds"))
   }
+  else if(n==3){
+    return(readRDS("model3.data.rds"))
+  }
+  
+  else if(n==4) {return(readRDS("model4.data.rds"))}
+  else if(n==5){return(readRDS("model5.data.rds"))}
+  else if(n==6){return(readRDS("model6.data.rds"))}
+  else if(n==7){return(readRDS("model7.data.rds"))}
+  else if(n==8){return(readRDS("model8.data.rds"))}
+  else{return(readRDS("model9.data.rds"))}
+  
 }
 
-#print(runif(1))
-
-#alts <- assign_block(n)
-
-#n <- nrow(dat.frame)
 set.seed(Sys.time())
-n<-sample(1:100,1)
+n<-sample(1:9,1)
 print(n)
 alts <- assign_blocks(n)
 
@@ -165,7 +180,7 @@ server <- function(input, output, session) {
     data <- c(data, choice1 = a1(), choice2 = a2(), choice3 = a3(),
               choice4 = a4(), choice5 = a5(), choice6 = a6(),
               
-              choice7 = a7(), choice8 = a8(), likerts(),levelanxes())
+              choice7 = a7(), choice8 = a8(), likerts(),levelanxes(),block=print(n))
     
     data <- c(data, timestamp = epochTime())
     data <- t(data)
