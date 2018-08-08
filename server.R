@@ -136,7 +136,16 @@ server <- function(input, output, session) {
   observeEvent(input$prevBtn, navPage(-1))
   observeEvent(input$nextBtn, navPage(1))
   
-  output$distPlot <- renderPlot({
+  
+  x<-reactive({
+    input$var1*input$min_brush
+  })
+  
+  y<-reactive({
+    input$var2*input$min_floss
+  })
+  
+myPlot <- function(){
     
     How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
     ggplot(How_preventive_am_i, aes(x=value,color=type,fill=type,alpha=0.6)) +
@@ -144,10 +153,16 @@ server <- function(input, output, session) {
       #geom_line()+
       geom_density(adjust=5)+
       
-      geom_vline(xintercept = input$var1*input$min_brush,linetype="dashed",colour="red")+
-      geom_vline(xintercept = input$var2*input$min_floss,linetype="dashed",colour="blue")
-  })
+      geom_vline(xintercept =x(),linetype="dashed",colour="red")+
+      geom_vline(xintercept = y(),linetype="dashed",colour="blue")
+}
+
+output$distPlot<-renderPlot({
+  myPlot()
+})
   
+    
+    
   graph.data<-reactive({
   input$var1*input$min_brush+input$var2*input$min_floss
   })
@@ -240,22 +255,36 @@ server <- function(input, output, session) {
   
   output$likert_plot <- renderPlot({
     likert_frame <- dat.frame[, grepl("likert", names(dat.frame))]
-    likert_frame[ ,1:19] <- lapply(likert_frame[,1:19], function(x) factor(x, levels = likert_choices))
+    likert_frame[ ,1:12] <- lapply(likert_frame[,1:12], function(x) factor(x, levels = likert_choices))
     
     names(likert_frame) <- likert_questions
     
-    likert_summ <- likert(likert_frame[ ,1:19])
+    likert_summ <- likert(likert_frame[ ,1:12])
     plot(likert_summ, group.order = likert_questions)
   })
   
   output$Anx_plot<-renderPlot({
     Anx_frame <- dat.frame[, grepl("likert", names(dat.frame))] 
-    Anx_frame[ ,1:4] <- lapply(Anx_frame[ ,20:23], function(x) factor(x, levels = levelanx_choices))
+    Anx_frame[ ,1:4] <- lapply(Anx_frame[ ,13:16], function(x) factor(x, levels = levelanx_choices))
     names(Anx_frame)<- Anx_questions
     
     Anx_summ<-likert(Anx_frame[ ,1:4])
     plot(Anx_summ, group.order=Anx_questions)
   })
+  
+  output$downloadfirstplot<-downloadHandler(
+    filename=function(){
+      
+    paste("distribution-plot","png",sep=".")
+      
+      },
+    
+    content<-function(file){
+      png(file)
+      print(myPlot())
+      dev.off()
+    }
+  )
   
   
 }

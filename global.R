@@ -36,7 +36,7 @@ source("likertQuestions.R")
 
 NUM_PAGES <- 5
 
-likert_questions <- paste("Question", 1:19)
+likert_questions <- paste("Question", 1:12)
 Anx_questions<-paste("Question", 1:4)
 
 

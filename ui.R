@@ -6,8 +6,12 @@ ui <- fluidPage(
           id = paste0("step", 1),
           column(12,align="center",tags$h1("General Public App")),
           fluidRow(
-            column(12, align="center",tags$h3("If you need further information about the project, visit:",tags$a(href="http://advocateoralhealth.com/","Advocate Project")))
-          ),
+            column(12, align="center",tags$h3("If you need further information about the project, visit:",tags$a(href="http://advocateoralhealth.com/","Advocate Project"))),
+          br(),
+          column(12, align="left",tags$h4("We are preparing to do a survey looking at what features people prefer when signing up to a new dental practice. Before the main part of the survey, we 'd like you to provide us with some information about your oral health profile. Please have a look on the following questions and answer appropriately.")),
+          br(),
+          column(12, align="left",tags$h5(" The graph below will show you where you lie across all participants' oral health behaviour or in other words how compliant you are. After answering the four first questions check the graph and the popped up message below it! Are you a master of oral health behaviour? Continue with the following questions. "))
+           ),
           sidebarLayout(
             sidebarPanel(
               sliderInput("var1",labelMandatory("how many times do you brush your teeth per week?"),0,56,1,ticks=FALSE),
@@ -44,12 +48,16 @@ ui <- fluidPage(
             
             
             
-            mainPanel(plotOutput("distPlot"), textOutput("message"))
+            mainPanel(plotOutput("distPlot"),downloadButton("downloadfirstplot","Download Graph"), textOutput("message"))
           )
       ),
       div(class = "page",
           id = paste0("step", 2),
           column(12,align="left",tags$h1("First set of choices")),
+          br(),
+          fluidRow(
+          column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume the practices are", tags$b("identical apart")," from the described features."))
+          ),
           choiceDataTableUI("one"),
           choiceDataTableUI("two"),
           choiceDataTableUI("three"),
@@ -58,6 +66,10 @@ ui <- fluidPage(
       div(class = "page",
           id = paste0("step", 3),
           column(12,align="left",tags$h1("Second set of choices")),
+          br(),
+          fluidRow(
+            column(12,align="left",tags$h4("Please continue choosing which dental practice you would register with in each question based on the same rationale as in the previous set"))
+          ),
           choiceDataTableUI("five"),
           choiceDataTableUI("six"),
           choiceDataTableUI("seven"),
@@ -65,7 +77,11 @@ ui <- fluidPage(
       ),
       div(class = "page",
           id = paste0("step", 4),
-          column(12,align="left",tags$h1("Some questions")),
+          column(12,align="left",tags$h1("Questions of attitudes")),
+          br(),
+          fluidRow(
+            column(12,align="left",tags$h4("Please rate the following statements on a scale from strongly disagree to stongly agree, according to your opinion"))
+          ),
           fluidPage(
             column(12, align = "center",
                    div(
@@ -73,16 +89,14 @@ ui <- fluidPage(
                      
                      likertQuestionsInput("likert", questions = c("I believe that there is likelihood to get tooth decay",
                                                                   "I believe that there is possibility of getting gum disease",
-                                                                  "I believe that my teeth condition is good", "I am too busy to visit a dentist",
+                                                                  "I am too busy to visit a dentist",
                                                                   "I do not think that the money spent on dental care are worth",
-                                                                  "I think that dental visit costs are too high","I believe that tooth decay is a serious problem",
+                                                                  "I believe that tooth decay is a serious problem",
                                                                   "I believe in adverse effect of dental problems on my health",
-                                                                  "I believe in the effectiveness of dental visits to prevent tooth decay","I believe that getting sick is a matter of luck",
+                                                                  "I believe that getting sick is a matter of luck",
                                                                   "I believe myself as being healthier than the average person",
-                                                                  "I believe that taking care of myself can avoid illness","I am able to find the energy to manage your dental or oral health",
-                                                                  "I am able to fill in dental forms e.g. enrolment forms",
-                                                                  "I am able to take a friend or family with you in the dental office",
-                                                                  "I am able to pay to visit a dentist", "I am confident that I can brush all my teeth and not just the front, visible ones",
+                                                                  "I believe that taking care of myself can avoid illness",
+                                                                  "I am confident that I can brush all my teeth and not just the front, visible ones",
                                                                   "I am confident that I can apply flossing properly",
                                                                   "I am confident that I can brush my teeth more than twice a day, if I think that there is a good reason for doing so (eg, I have eaten sweets)"), choices = likert_choices,
                                           selected = "Neutral")
@@ -90,12 +104,17 @@ ui <- fluidPage(
                    )))),
       div(class = "page",
           id = paste0("step", 5),
-          
+        
           fluidPage(
             
             column(12, align = "center",
                    div(
-                     id = "levelanx_input", column(12,align="left",tags$h1("Some additional questions")),
+                     id = "levelanx_input",
+                     column(12,align="left",tags$h1("Questions of attitudes")),
+                     br(),
+                     fluidRow(
+                       column(12,align="left",tags$h4("Please rate the following statements on a scale from slightly anxious to extremely anxious, according to how you feel about the following statements"))
+                     ),
                      likertQuestionsInput("levelanx", questions=c("If you went to your dentist for treatment tomorrow, how would you feel?",
                                                                   "If you were sitting in the waiting room (waiting for treatment), how would you feel?",
                                                                   "If you were about to have a tooth drilled, how would you feel?",
