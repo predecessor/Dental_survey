@@ -1,4 +1,8 @@
 ui <- fluidPage(
+  #tags$head(
+    #tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.min.css")
+  #),
+  
   useShinyjs(),
   hidden(
     list(
@@ -10,7 +14,7 @@ ui <- fluidPage(
           br(),
           column(12, align="left",tags$h4("We are preparing to do a survey looking at what features people prefer when signing up to a new dental practice. Before the main part of the survey, we 'd like you to provide us with some information about your oral health profile. Please have a look on the following questions and answer appropriately.")),
           br(),
-          column(12, align="left",tags$h5(" The graph below will show you where you lie across all participants' oral health behaviour or in other words how compliant you are. After answering the four first questions check the graph and the popped up message below it! Are you a master of oral health behaviour? Continue with the following questions. "))
+          column(12, align="left",tags$h5(" The interrupted lines of the graph below will show you where you lie across all survey participants' oral health behaviour or in other words how compliant your oral health profile is", tags$b("(the more to the right the better!)"), "After answering the first four questions check your graph and the popped up message below it! Are you a master of oral health behaviour? Download and share your graph with your Facebook friends to show them how much you have mastered oral health prevention behaviour! Continue with the following questions. "))
            ),
           sidebarLayout(
             sidebarPanel(
@@ -56,7 +60,9 @@ ui <- fluidPage(
           column(12,align="left",tags$h1("First set of choices")),
           br(),
           fluidRow(
-          column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume the practices are", tags$b("identical apart")," from the described features."))
+          column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
+          br(),
+          column(12,align="left",tags$img(height=400, width=800, src="descriptions.png"))
           ),
           choiceDataTableUI("one"),
           choiceDataTableUI("two"),
@@ -68,7 +74,9 @@ ui <- fluidPage(
           column(12,align="left",tags$h1("Second set of choices")),
           br(),
           fluidRow(
-            column(12,align="left",tags$h4("Please continue choosing which dental practice you would register with in each question based on the same rationale as in the previous set"))
+            column(12,align="left",tags$h4("Please continue choosing which dental practice you would register with in each question based on the same rationale as in the previous page")),
+            br(),
+            column(12,align="left",tags$img(height=400, width=800, src="descriptions.png"))
           ),
           choiceDataTableUI("five"),
           choiceDataTableUI("six"),

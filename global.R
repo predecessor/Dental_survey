@@ -30,6 +30,7 @@ library(choiceDes)
 library(data.table)
 
 
+
 source("choiceDataTable.R")
 source("likertQuestions.R")
 
@@ -75,6 +76,8 @@ dat.frame
 
 dat.frame.new<-mutate(dat.frame,brushing_intensity=dat.frame$var1*dat.frame$min_brush,flossing_intensity=dat.frame$var2*dat.frame$min_floss,both_intensities=dat.frame$var1*dat.frame$min_brush+dat.frame$var2*dat.frame$min_floss)
 quantile(dat.frame.new$both_intensities,prob=0.5)
+
+
 
 
 #nulls<-as.data.frame(matrix(0,nrow=10,ncol=5))
