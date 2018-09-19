@@ -105,12 +105,10 @@ server <- function(input, output, session) {
   
   observe({
     if(rv$page == 2) {
-      if(length(a1()) == 0 || length(a2()) == 0 || length(a3()) == 0 || length(a4()) == 0) {
+      if(length(a1()) == 0) {
         disable(id = "nextBtn")
         return()
-      } else if(a1() == "None" || a2() == "None" || a3() == "None" || a4() == "None") {
-        disable(id = "nextBtn")
-      } else {
+      }  else {
         enable(id = "nextBtn")
       }
     }
@@ -118,12 +116,76 @@ server <- function(input, output, session) {
   
   observe({
     if(rv$page == 3) {
-      if(length(a5()) == 0 || length(a6()) == 0 || length(a7()) == 0 || length(a8()) == 0) {
+      if(length(a2()) == 0 ) {
         disable(id = "nextBtn")
         return()
-      } else if(a5() == "None" || a6() == "None" || a7() == "None" || a8() == "None") {
-        disable(id = "nextBtn")
       } else {
+        enable(id = "nextBtn")
+      }
+    }
+  })
+  
+  observe({
+    if(rv$page == 4) {
+      if(length(a3()) == 0 ) {
+        disable(id = "nextBtn")
+        return()
+      }  else {
+        enable(id = "nextBtn")
+      }
+    }
+  })
+  
+  observe({
+    if(rv$page == 5) {
+      if(length(a4()) == 0) {
+        disable(id = "nextBtn")
+        return()
+      } else {
+        enable(id = "nextBtn")
+      }
+    }
+  })
+  
+  observe({
+    if(rv$page == 6) {
+      if(length(a5()) == 0) {
+        disable(id = "nextBtn")
+        return()
+      }  else {
+        enable(id = "nextBtn")
+      }
+    }
+  })
+  
+  observe({
+    if(rv$page == 7) {
+      if(length(a6()) == 0) {
+        disable(id = "nextBtn")
+        return()
+      }  else {
+        enable(id = "nextBtn")
+      }
+    }
+  })
+  
+  observe({
+    if(rv$page == 8) {
+      if(length(a7()) == 0) {
+        disable(id = "nextBtn")
+        return()
+      }  else {
+        enable(id = "nextBtn")
+      }
+    }
+  })
+  
+  observe({
+    if(rv$page == 9) {
+      if(length(a8()) == 0) {
+        disable(id = "nextBtn")
+        return()
+      }  else {
         enable(id = "nextBtn")
       }
     }

@@ -4,8 +4,8 @@ choiceDataTableUI <- function(id) {
   tagList(
     DT::dataTableOutput(ns("dt")),
     radioButtons(ns("r"), "Choose One",
-                 c("Alternative 1", "Alternative 2", "None"),
-                 selected = "None")
+                 c("Alternative 1", "Alternative 2"),
+                 selected = 0)
   )
 }
 
@@ -23,14 +23,13 @@ choiceDataTable <- function(input, output, session, data) {
   observeEvent(input$r, {
     a <- input$r
     if(a == "Alternative 1") {
-      proxy %>% selectColumns(1)
+     proxy %>% selectColumns(1)
     }
     if(a == "Alternative 2") {
-      proxy %>% selectColumns(2)
+     proxy %>% selectColumns(2)
     }
-    if(a == "None") {
-      proxy %>% selectColumns(NULL)
-    }
+    
+    
   })
   
   
@@ -40,9 +39,8 @@ choiceDataTable <- function(input, output, session, data) {
       "Alternative 1"
     } else if (r == 2) {
       "Alternative 2"
-    } else {
-      "None"
-    }
+    } 
+   
     
     updateRadioButtons(session, "r", 
                        selected = s)

@@ -35,7 +35,7 @@ source("choiceDataTable.R")
 source("likertQuestions.R")
 
 
-NUM_PAGES <- 5
+NUM_PAGES <- 11
 
 likert_questions <- paste("Question", 1:12)
 Anx_questions<-paste("Question", 1:4)
