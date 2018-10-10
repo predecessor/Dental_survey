@@ -12,21 +12,19 @@ choiceDataTableUI <- function(id) {
 choiceDataTable <- function(input, output, session, data) {
   ns <- session$ns
   
-  output$dt <- renderDataTable(
-    datatable(data, rownames = TRUE,
-              selection = list(mode = "single", target = "column"),
-              options = list(dom = "t"))
-  )
+  output$dt <- DT::renderDataTable(data, rownames = TRUE,
+                                   selection = list(mode = "single", target = "column"),
+                                   options = list(dom = "t"))
   
-  proxy = dataTableProxy(ns("dt"))
+  proxy = dataTableProxy("dt")
   
   observeEvent(input$r, {
     a <- input$r
     if(a == "Alternative 1") {
-     proxy %>% selectColumns(1)
+      proxy %>% selectColumns(1)
     }
     if(a == "Alternative 2") {
-     proxy %>% selectColumns(2)
+      proxy %>% selectColumns(2)
     }
     
     
@@ -40,7 +38,7 @@ choiceDataTable <- function(input, output, session, data) {
     } else if (r == 2) {
       "Alternative 2"
     } 
-   
+    
     
     updateRadioButtons(session, "r", 
                        selected = s)
