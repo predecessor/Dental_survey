@@ -97,14 +97,14 @@ server <- function(input, output, session) {
   rv <- reactiveValues(page = 1)
   
   observe({
-    toggleState(id = "prevBtn", condition = rv$page > 1)
+    toggleState(id = "prevBtn", condition = rv$page > 1 &  rv$page <NUM_PAGES)
     toggleState(id = "nextBtn", condition = rv$page < NUM_PAGES)
     hide(selector = ".page")
     show(sprintf("step%s", rv$page))
   })
   
   observe({
-    if(rv$page == 2) {
+    if(rv$page == 3) {
       if(length(a1()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -115,7 +115,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 3) {
+    if(rv$page == 4) {
       if(length(a2()) == 0 ) {
         disable(id = "nextBtn")
         return()
@@ -126,7 +126,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 4) {
+    if(rv$page == 5) {
       if(length(a3()) == 0 ) {
         disable(id = "nextBtn")
         return()
@@ -137,7 +137,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 5) {
+    if(rv$page == 6) {
       if(length(a4()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -148,7 +148,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 6) {
+    if(rv$page == 7) {
       if(length(a5()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -159,7 +159,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 7) {
+    if(rv$page == 8) {
       if(length(a6()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -170,7 +170,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 8) {
+    if(rv$page == 9) {
       if(length(a7()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -181,12 +181,12 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 9) {
+    if(rv$page == 10) {
       if(length(a8()) == 0) {
-        disable(id = "nextBtn")
+        disable(id = "submit")
         return()
       }  else {
-        enable(id = "nextBtn")
+        enable(id = "submit")
       }
     }
   })
@@ -222,6 +222,17 @@ myPlot <- function(){
 output$distPlot<-renderPlot({
   myPlot()
 })
+  mySecondPlot<-function(){
+    oral_sit<-gather(dat.frame.new,value="value",key="type",oral_condition)
+    ggplot(oral_sit, aes(x=value,color=type,fill=type,alpha=0.6)) +
+      scale_fill_manual(values="blue")+
+      #geom_line()+
+      geom_density(adjust=5)+
+      geom_vline(xintercept = x(),linetype="dashed",colour="blue")
+  }
+  output$SecondDistPlot<-renderPlot({
+    mySecondPlot() 
+  })
   
     
     
@@ -257,7 +268,7 @@ output$distPlot<-renderPlot({
     data <- c(data, choice1 = a1(), choice2 = a2(), choice3 = a3(),
               choice4 = a4(), choice5 = a5(), choice6 = a6(),
               
-              choice7 = a7(), choice8 = a8(), likerts(),levelanxes(),block=print(n))
+              choice7 = a7(), choice8 = a8(), block=print(n))
     
     data <- c(data, timestamp = epochTime())
     data <- t(data)
@@ -281,12 +292,17 @@ output$distPlot<-renderPlot({
   observeEvent(input$submit, {
     saveData(formData())
     
-    shinyjs::hide("levelanx_input")
+    shinyjs::hide("lastpage")
     
     
     shinyjs::show("thankyou_msg")
     shinyjs::hide("pager")
   })
+  
+  
+  #observe({
+    #toggle(id = "last page choice", condition =input$submit )
+  #})
   
   # 
   # a1 <- callModule(choiceDataTable, "one", d1)
@@ -309,30 +325,30 @@ output$distPlot<-renderPlot({
   a7 <- callModule(choiceDataTable, "seven", alts[[7]])
   a8 <- callModule(choiceDataTable, "eight", alts[[8]])
   
-  likerts <- callModule(likertQuestions, "likert")
-  
-  #levelanxes <- callModule(levelanxQuestions,"levelanx")
-  levelanxes <- callModule(likertQuestions,"levelanx")
+  #likerts <- callModule(likertQuestions, "likert")
   
   
-  output$likert_plot <- renderPlot({
-    likert_frame <- dat.frame[, grepl("likert", names(dat.frame))]
-    likert_frame[ ,1:12] <- lapply(likert_frame[,1:12], function(x) factor(x, levels = likert_choices))
+  #levelanxes <- callModule(likertQuestions,"levelanx")
+  
+  
+  #output$likert_plot <- renderPlot({
+    #likert_frame <- dat.frame[, grepl("likert", names(dat.frame))]
+    #likert_frame[ ,1:12] <- lapply(likert_frame[,1:12], function(x) factor(x, levels = likert_choices))
     
-    names(likert_frame) <- likert_questions
+    #names(likert_frame) <- likert_questions
     
-    likert_summ <- likert(likert_frame[ ,1:12])
-    plot(likert_summ, group.order = likert_questions)
-  })
+    #likert_summ <- likert(likert_frame[ ,1:12])
+    #plot(likert_summ, group.order = likert_questions)
+  #})
   
-  output$Anx_plot<-renderPlot({
-    Anx_frame <- dat.frame[, grepl("likert", names(dat.frame))] 
-    Anx_frame[ ,1:4] <- lapply(Anx_frame[ ,13:16], function(x) factor(x, levels = levelanx_choices))
-    names(Anx_frame)<- Anx_questions
+  #output$Anx_plot<-renderPlot({
+    #Anx_frame <- dat.frame[, grepl("likert", names(dat.frame))] 
+    #Anx_frame[ ,1:4] <- lapply(Anx_frame[ ,13:16], function(x) factor(x, levels = levelanx_choices))
+    #names(Anx_frame)<- Anx_questions
     
-    Anx_summ<-likert(Anx_frame[ ,1:4])
-    plot(Anx_summ, group.order=Anx_questions)
-  })
+    #Anx_summ<-likert(Anx_frame[ ,1:4])
+    #plot(Anx_summ, group.order=Anx_questions)
+  #})
   
   output$downloadfirstplot<-downloadHandler(
     filename=function(){

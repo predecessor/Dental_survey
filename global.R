@@ -2,13 +2,13 @@
 
 #install.packages("modeest")
 #install.packages(c("reshape","RcolorBrewer","ggthemes","stringr"))
-#install.packages("dplyr")
+
 
 #install.packages("tidyr")
-#install.packages("data.table")
-#install.packages("choiceDes","data.table","conjoint")
-#install.packages("httpuv")
+
 #install.packages("choiceDes")
+#install.packages("httpuv")
+
 
 library(httpuv)
 library(modeest)
@@ -32,17 +32,17 @@ library(data.table)
 
 
 source("choiceDataTable.R")
-source("likertQuestions.R")
+#source("likertQuestions.R")
 
 
-NUM_PAGES <- 11
+NUM_PAGES <- 10
 
-likert_questions <- paste("Question", 1:12)
-Anx_questions<-paste("Question", 1:4)
+#likert_questions <- paste("Question", 1:12)
+#Anx_questions<-paste("Question", 1:4)
 
 
-likert_choices <- c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree")
-levelanx_choices<-c("Not Anxious","Slightly Anxious","Fairly Anxious","Very Anxious", "Extremely Anxious")
+#likert_choices <- c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree")
+#levelanx_choices<-c("Not Anxious","Slightly Anxious","Fairly Anxious","Very Anxious", "Extremely Anxious")
 
 
 
@@ -61,7 +61,7 @@ labelMandatory <- function(label) {
 appCSS <-
   ".mandatory_star { color: red; }"
 
-fieldsAll <- c("var1","min_brush","var2","min_floss","age","ethnicity","gender","education","visit_freq","oral_condition","occupation","alcohol","region")
+fieldsAll <- c("var1","min_brush","var2","min_floss","age","num_adul","num_child","gender","visit_freq1","visit_freq2","visit_reason","text1","ethnicity","text2","oral_condition","visit_pay","visit_dread","income","education","region")
 responsesDir <- file.path("responses")
 epochTime <- function() {
   as.integer(Sys.time())
