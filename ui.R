@@ -44,7 +44,7 @@ ui <- fluidPage(
             
             
             
-            mainPanel(plotOutput("distPlot"),downloadButton("downloadfirstplot","Download Graph"), textOutput("message"))
+            mainPanel(plotOutput("distPlot"),downloadButton("downloadfirstplot","Download Graph"), textOutput("message1"))
           )
       ),
       div(class = "page",
@@ -70,7 +70,7 @@ ui <- fluidPage(
                                           "London" = 5, "West Midlands"=6, "South West of England"=7,"East of England"=8,"South East of England"=9, "Scotland"=10, "Ireland"=11,"Wales"=12),selected = 12)
             ),
             
-            mainPanel(plotOutput("SecondDistPlot"))
+            mainPanel(plotOutput("SecondDistPlot"),textOutput ("message2"))
           )
       ),
             

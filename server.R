@@ -223,13 +223,27 @@ output$distPlot<-renderPlot({
   myPlot()
 })
   mySecondPlot<-function(){
-    oral_sit<-gather(dat.frame.new,value="value",key="type",oral_condition)
-    ggplot(oral_sit, aes(x=value,color=type,fill=type,alpha=0.6)) +
-      scale_fill_manual(values="blue")+
-      #geom_line()+
-      geom_density(adjust=5)+
-      geom_vline(xintercept = x(),linetype="dashed",colour="blue")
+    
+      ggplot(dat.frame.new, aes(x=oral_condition, fill="steelblue")) +
+      geom_bar(stat="count")+
+      theme_minimal()+
+      scale_x_discrete(limits=c("None left", "Poor","Average","Good","Excellent"))+
+      geom_vline(xintercept =as.numeric(input$oral_condition),linetype="dashed",colour="blue")
   }
+    
+    #qplot(dat.frame.new$oral_condition,
+          #geom="histogram",
+          #binwidth = 0.5,  
+          #main = "Histogram for oral health", 
+          #xlab = "Oral health",  
+          #fill=I("blue"), 
+          #col=I("red"), 
+          #alpha=I(.2),
+          #xlim=c(1,8))+
+          #geom_segment(aes(x =as.numeric(input$oral_condition), y = 0, xend = as.numeric(input$oral_condition), yend = nrow(dat.frame.new)), linetype="dashed",  color="red")
+   
+  
+    
   output$SecondDistPlot<-renderPlot({
     mySecondPlot() 
   })
@@ -240,14 +254,41 @@ output$distPlot<-renderPlot({
   input$var1*input$min_brush+input$var2*input$min_floss
   })
   
-  output$message <- renderPrint({
-    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.5)})) {
-     print("You belong to the 50 percent LEAST preventive people")
+  output$message1 <- renderPrint({
+    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25)})) {
+     print("You belong to the 25 percent LEAST preventive part of the population")}
+      else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)})){
+        print("You belong to the 50 percent LEAST preventive part of the population")
+      }
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)})){
+      print("You belong to the 50 percent MOST preventive part of the population")
     }
-    else {
-      print("You belong to the 50 percent MOST preventive people")
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+      print("WoW! You belong to the 25 percent MOST preventive part of the population")
+    }
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+      print("Wow! You are a master of prevention belonging to the 10 percent MOST preventive part of the population")
     }
     
+  })
+  
+  
+  output$message2 <- renderPrint({
+    if (input$oral_condition==1){
+    print(paste0("You belong to the ",as.integer((dat.count[1,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is extremely poor")) 
+    }
+    else if (input$oral_condition==2){
+      print(paste0("You belong to the ",as.integer((dat.count[2,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is poor")) 
+    }
+    else if (input$oral_condition==3){
+      print(paste0("You belong to the ",as.integer((dat.count[3,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is average")) 
+    }
+    else if (input$oral_condition==4){
+      print(paste0("You belong to the ",as.integer((dat.count[4,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is good")) 
+    }
+    else if (input$oral_condition==5){
+      print(paste0("You belong to the ",as.integer((dat.count[5,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is excellent")) 
+    }
   })
   
   observe({
