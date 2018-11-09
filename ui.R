@@ -23,20 +23,22 @@ ui <- fluidPage(
               sliderInput("var2",labelMandatory("how many times do you clean between your teeth, using an interdental cleaner (like floss) per week?"),0,56,1,ticks=FALSE),
               numericInput("min_floss","How long on average have you been cleaning between your teeth using an interdental cleaner (like floss) for each time? (in minutes)",value=1), 
               
-              numericInput("age", "How old are you?",value="none"),
-              numericInput("num_adul", "Number of adults in the household",value="none"),
-              numericInput("num_child", "Number of children if applicable",value="none"),
+              numericInput("age", labelMandatory("How old are you?"),value="none"),
               
               
-              selectInput("gender","Gender",choices=list("Female"=1,"Male"=2,"Other/Prefer not to say"=3),selected=1),
+              
+              selectInput("gender",labelMandatory("Gender"),choices=list("Female"=1,"Male"=2,"Other/Prefer not to say"=3),selected=1),
              
-              radioButtons("visit_freq1", "How long did it pass since your last dental visit?",
-                           choices = list("6 months or less" = 1, "1 year or less"=2, "1-2 years" = 3,"More than 2 years"=4),selected = 4),
+              radioButtons("visit_freq1", "When did you last visit a dentist about your teeth, dentures or gums?",
+                           choices = list("Less than 1 year ago" = 1, "1 to less than 2 years ago"=2, "2 or more years ago" = 3,"I have never attended"=4, "I can't remember"=5),selected = 5),
               radioButtons("visit_freq2", "How often do you go to the dentist?",
-                           choices = list("Every 6 months" = 1, "Every 1 year"=2, "Every 2 years" = 3,"Less often"=4, "Only in pain/emergency"=5),selected = 5),
-              radioButtons("visit_reason", "Why did you last go to the dentist?",
-                           choices = list("Check-up appointment" = 1, "Appointment for treatment"=2, "Emergency/pain" = 3,"Other"=4),selected = 4),
-              textInput("text1", h3("If you selected Other, please specify:"), value = "Enter text if you selected other in the previous question")
+                           choices = list("Every 6 months" = 1, "Every 1 year"=2, "Every 2 years" = 3,"Less often"=4, "Only in pain/emergency"=5, "I have never visited the dentist"=6),selected = 6),
+              radioButtons("visit_reason", "What was the reason for your last visit to the dentist?",
+                           choices = list("Check-up, examination or cleaning" = 1, "Planned treatment (e.g. routine filling or extraction)"=2, "Emergency treatment" = 3," I do not know"=4, "Other"=5),selected = 5),
+              textInput("text1", h3("If you selected Other, please specify:"), value = "Enter text if you selected other in the previous question"),
+              
+              radioButtons("alchohol", "What is your average alchohol consumption weekly?",
+                           choices = list("0-1 drinks/week" = 1, "1-4 drinks/week"=2, "5-14 drinks/week" = 3,"15 or more drinks/week"=4),selected = 4)
               
             ),
             
@@ -44,7 +46,7 @@ ui <- fluidPage(
             
             
             
-            mainPanel(plotOutput("distPlot"),downloadButton("downloadfirstplot","Download Graph"), textOutput("message1"))
+            mainPanel(plotOutput("distPlot"),downloadButton("downloadfirstplot","Download Graph"),textOutput("message1"))
           )
       ),
       div(class = "page",
@@ -57,14 +59,14 @@ ui <- fluidPage(
                            choices = list("White" = 1, "Mixed/ Multiple ethnic groups"=2, "Asian/ Asian British" = 3,"Black / African / Caribbean / Black British"=4,
                                           "Other" = 5),selected = 5),
               textInput("text2", h3("If you selected Other, please specify:"), value = "Enter text if you selected other in the previous question"),
-              radioButtons("oral_condition","How healthy are your teeth?",choices = list("None left" = 1, "Poor"=2, "Average" = 3,"Good"=4,
+              radioButtons("oral_condition","How healthy do you think your teeth are?",choices = list("None left" = 1, "Poor"=2, "Average" = 3,"Good"=4,
                                                                                          "Excellent" = 5),selected = 5),
-              radioButtons("visit_pay","Do you usually pay for treatment? ",choices = list("Yes" = 1, "No"=2),selected = 2),
+              radioButtons("visit_pay","How do you pay for your dental care and treatment? ",choices = list("Partially (covered by the NHS or a public medical scheme)" = 1, "Partially (covered by a private insurance scheme"=2, "Completely by myself"=3, "Private insurance scheme"=4, "I do not pay"=5, "I do not know"=6),selected = 6),
+              
               radioButtons("visit_dread","Do you enjoy or dread a visit to the dentist? ",choices = list("Enjoy" = 1, "Don't mind"=2, "Dread" = 3),selected = 3),
-              radioButtons("income","Which category does your annual income belong to?",choices = list("Less than 6800£" = 1, "6801-11000£"=2, "11001-17000£" = 3,"17001-25700£"=4,
-                                                                                         "More than 25700£" = 5),selected = 5),
-              radioButtons("education","What is your level of education? ",choices = list("No formal qualifications" = 1, "GCSE/ O Level/ Equivalent"=2, "A Level/ Highers/ Equivalent" = 3,"Undergraduate degree/ Professional equivalent"=4,
-                                                                                         "Postgraduate degree/ Professional equivalent" = 5),selected = 5),
+              radioButtons("smoking_status","What is your smoking status?",choices = list("I have never smoked" = 1, "I am a former smoker"=2, "I am a current smoker" = 3),selected = 3),
+              radioButtons("education","What is your highest level of education? ",choices = list("No education" = 1, "Primary education (elementary school / left school at age 11-14)"=2, "Secondary school (left school after age 14 without qualification)" = 3,"Pre-vocational / vocational education (GCSEs, Standard Grade, GNVQ Foundation & Intermediate, NVQ levels 1 and 2)"=4,
+                                                                                         "Pre-vocational / vocational education (GCSE A/AS levels, Higher Grade, CSYS, GNVQ Advanced, NVQ Level 3)" = 5, "Vocational qualification (qualification in higher education)"=6, "University (Bachelor, Master and doctoral degree)"=7, "Prefer not to say"=8),selected = 8),
               radioButtons("region", "Where do you live?",
                            choices = list("North West of England" = 1, "Yorkshire and the Humber"=2, "North East of England" = 3,"East Midlands"=4,
                                           "London" = 5, "West Midlands"=6, "South West of England"=7,"East of England"=8,"South East of England"=9, "Scotland"=10, "Ireland"=11,"Wales"=12),selected = 12)
@@ -81,7 +83,7 @@ ui <- fluidPage(
           fluidRow(
           column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
           br(),
-          column(12,align="left",tags$img(height=400, width=800, src="descriptions.png"))
+          column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
           ),
           choiceDataTableUI("one")
       ),
@@ -92,7 +94,7 @@ ui <- fluidPage(
           fluidRow(
             column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=800, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
           ),
           choiceDataTableUI("two")
       ),
@@ -103,7 +105,7 @@ ui <- fluidPage(
           fluidRow(
             column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=800, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
           ),
           choiceDataTableUI("three")
       ),
@@ -114,7 +116,7 @@ ui <- fluidPage(
           fluidRow(
             column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=800, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
           ),
           choiceDataTableUI("four")
       ),
@@ -126,7 +128,7 @@ ui <- fluidPage(
           fluidRow(
             column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=800, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
           ),
           choiceDataTableUI("five")
       ),
@@ -137,7 +139,7 @@ ui <- fluidPage(
           fluidRow(
             column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=800, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
           ),
           choiceDataTableUI("six")
       ),
@@ -148,7 +150,7 @@ ui <- fluidPage(
           fluidRow(
             column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=800, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
           ),
           choiceDataTableUI("seven")
       ),
@@ -248,3 +250,5 @@ ui <- fluidPage(
          actionButton("nextBtn", "Next >")
   )
  )
+
+

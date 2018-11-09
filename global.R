@@ -49,7 +49,7 @@ NUM_PAGES <- 10
 
 
 
-fieldsMandatory <- c("var1", "var2")
+fieldsMandatory <- c("age", "gender")
 
 labelMandatory <- function(label) {
   tagList(
@@ -61,7 +61,7 @@ labelMandatory <- function(label) {
 appCSS <-
   ".mandatory_star { color: red; }"
 
-fieldsAll <- c("var1","min_brush","var2","min_floss","age","num_adul","num_child","gender","visit_freq1","visit_freq2","visit_reason","text1","ethnicity","text2","oral_condition","visit_pay","visit_dread","income","education","region")
+fieldsAll <- c("var1","min_brush","var2","min_floss","age","gender","visit_freq1","visit_freq2","visit_reason","text1","alchohol","ethnicity","text2","oral_condition","visit_pay","visit_dread","smoking_status","education","region")
 responsesDir <- file.path("responses")
 epochTime <- function() {
   as.integer(Sys.time())
@@ -78,6 +78,22 @@ dat.frame.new<-mutate(dat.frame,brushing_intensity=dat.frame$var1*dat.frame$min_
 quantile(dat.frame.new$both_intensities,prob=0.5)
 
 dat.count<-as.data.frame(count(dat.frame.new,dat.frame.new$oral_condition))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #nulls<-as.data.frame(matrix(0,nrow=10,ncol=5))

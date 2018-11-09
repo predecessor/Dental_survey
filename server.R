@@ -67,20 +67,20 @@ assign_blocks <- function(n) {
   #r <- runif(1)
   #if(r > 0.5) {
   if(n == 1) {
-    return(readRDS("model1.data.rds"))
+    return(readRDS("Model1.rds"))
   }else if(n==2) {
-    return(readRDS("model2.data.rds"))
+    return(readRDS("Model2.rds"))
   }
   else if(n==3){
-    return(readRDS("model3.data.rds"))
+    return(readRDS("Model3.rds"))
   }
   
-  else if(n==4) {return(readRDS("model4.data.rds"))}
-  else if(n==5){return(readRDS("model5.data.rds"))}
-  else if(n==6){return(readRDS("model6.data.rds"))}
-  else if(n==7){return(readRDS("model7.data.rds"))}
-  else if(n==8){return(readRDS("model8.data.rds"))}
-  else{return(readRDS("model9.data.rds"))}
+  else if(n==4) {return(readRDS("Model4.rds"))}
+  else if(n==5){return(readRDS("Model5.rds"))}
+  else if(n==6){return(readRDS("Model6.rds"))}
+  else if(n==7){return(readRDS("Model7.rds"))}
+  else if(n==8){return(readRDS("Model8.rds"))}
+  else{return(readRDS("Model9.rds"))}
   
 }
 
@@ -97,7 +97,7 @@ server <- function(input, output, session) {
   rv <- reactiveValues(page = 1)
   
   observe({
-    toggleState(id = "prevBtn", condition = rv$page > 1 &  rv$page <NUM_PAGES)
+    toggleState(id = "prevBtn", condition = rv$page > 1 &  rv$page < NUM_PAGES)
     toggleState(id = "nextBtn", condition = rv$page < NUM_PAGES)
     hide(selector = ".page")
     show(sprintf("step%s", rv$page))
@@ -184,9 +184,11 @@ server <- function(input, output, session) {
     if(rv$page == 10) {
       if(length(a8()) == 0) {
         disable(id = "submit")
+        
         return()
       }  else {
         enable(id = "submit")
+        
       }
     }
   })
@@ -212,7 +214,10 @@ myPlot <- function(){
     How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
     ggplot(How_preventive_am_i, aes(x=value,color=type,fill=type,alpha=0.6)) +
       scale_fill_manual(values=c("red","blue"))+
-      #geom_line()+
+        
+      ggtitle(selectedTitle())+
+      #coord_flip() +
+      theme_bw(16)+
       geom_density(adjust=5)+
       
       geom_vline(xintercept =x(),linetype="dashed",colour="red")+
@@ -231,19 +236,7 @@ output$distPlot<-renderPlot({
       geom_vline(xintercept =as.numeric(input$oral_condition),linetype="dashed",colour="blue")
   }
     
-    #qplot(dat.frame.new$oral_condition,
-          #geom="histogram",
-          #binwidth = 0.5,  
-          #main = "Histogram for oral health", 
-          #xlab = "Oral health",  
-          #fill=I("blue"), 
-          #col=I("red"), 
-          #alpha=I(.2),
-          #xlim=c(1,8))+
-          #geom_segment(aes(x =as.numeric(input$oral_condition), y = 0, xend = as.numeric(input$oral_condition), yend = nrow(dat.frame.new)), linetype="dashed",  color="red")
    
-  
-    
   output$SecondDistPlot<-renderPlot({
     mySecondPlot() 
   })
@@ -272,6 +265,26 @@ output$distPlot<-renderPlot({
     
   })
   
+  selectedTitle<-reactive({
+    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25)})) {
+      print("You are among the 25 percent LEAST preventive people")}
+    else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)})){
+      print("You are among the 50 percent LEAST preventive people")
+    }
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)})){
+      print("You are among the 50 percent MOST preventive people")
+    }
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+      print("WoW! You are among the 25 percent MOST preventive people")
+    }
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+      print("Wow! You are a master of prevention among the 10 percent MOST preventive people")
+    }
+  })
+
+  
+  
+  #graph2.data<-reactive({input$oral_condition})
   
   output$message2 <- renderPrint({
     if (input$oral_condition==1){
@@ -280,12 +293,12 @@ output$distPlot<-renderPlot({
     else if (input$oral_condition==2){
       print(paste0("You belong to the ",as.integer((dat.count[2,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is poor")) 
     }
-    else if (input$oral_condition==3){
+   else if (input$oral_condition==3){
       print(paste0("You belong to the ",as.integer((dat.count[3,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is average")) 
     }
     else if (input$oral_condition==4){
       print(paste0("You belong to the ",as.integer((dat.count[4,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is good")) 
-    }
+   }
     else if (input$oral_condition==5){
       print(paste0("You belong to the ",as.integer((dat.count[5,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is excellent")) 
     }
@@ -301,7 +314,7 @@ output$distPlot<-renderPlot({
              logical(1))
     mandatoryFilled <- all(mandatoryFilled)
     # enable/disable the submit button
-    shinyjs::toggleState(id = "submit", condition = mandatoryFilled)
+    shinyjs::toggleState(id = "nextBtn", condition = mandatoryFilled)
   })
   
   formData <- reactive({
