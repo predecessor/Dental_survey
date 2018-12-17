@@ -12,22 +12,35 @@ ui <- fluidPage(
           fluidRow(
             column(12, align="center",tags$h3("If you need further information about the project, visit:",tags$a(href="http://advocateoralhealth.com/","Advocate Project"))),
           br(),
-          column(12, align="left",tags$h4("We are preparing to do a survey looking at what features people prefer when signing up to a new dental practice. Before the main part of the survey, we 'd like you to provide us with some information about your oral health profile. Please have a look on the following questions and answer appropriately.")),
+          column(12, align="left",tags$h4("This survey is assessing what features people prefer when signing up to a new dental practice. Please read through and answer the following questions. There are no right or wrong answers. We are interested in your own honest, personal opinions.")),
           br(),
-          column(12, align="left",tags$h5(" The interrupted lines of the graph below will show you where you lie across all survey participants' oral health behaviour or in other words how compliant your oral health profile is", tags$b("(the more to the right the better!)"), "After answering the first four questions check your graph and the popped up message below it! Are you a master of oral health behaviour? Download and share your graph with your Facebook friends to show them how much you have mastered oral health prevention behaviour! Continue with the following questions. "))
-           ),
+          column(12, align="left",tags$h5("This questionnaire is organised into",tags$b(" two parts."),"The",tags$b("First part"), "asks you to provide some information about you, your perceived oral health and some behaviours related to that. ")),
+          br(),
+          column(12, align="left",tags$h5("The", tags$b("second part"), "presents you with eight scenarios. You will then be asked in each scenario to select which dental practice you would like to register at for a",tags$b(" dental check-up appointment."),"For each scenario we would like you to imagine you are going to register with a", tags$b("new"), "dental practice for a first time. You will be given options of a", tags$b("typical check-up appointment"), "for two", tags$b("hypothetical"),"dental practices and",tags$b("you will be required to choose"),"which you would like to register with", tags$b("based on the options presented.")))
+          #br(),
+          ),
+          
+          mainPanel() 
+          
+        ),
+    div(class = "page",
+          id = paste0("step", 2),
+          column(12, align="left",tags$h5(" The interrupted lines of the graph below will show you where you lie across all survey participants' oral health behaviour or in other words how compliant your oral health profile is", tags$b("(the more to the right the better!)"), "After answering the first four questions check your graph and the popped up message below it! Are you a master of oral health behaviour? Download and share your graph with your Facebook friends to show them how much you have mastered oral health prevention behaviour! Continue with the following questions. ")), 
+          br(),
+          
+          
           sidebarLayout(
             sidebarPanel(
-              sliderInput("var1",labelMandatory("how many times do you brush your teeth per week?"),0,56,1,ticks=FALSE),
+              sliderInput("var1","how many times do you brush your teeth per week?",0,56,1,ticks=FALSE),
               numericInput("min_brush","How long on average have you been brushing your teeth for each time? (in minutes)", value = 1),
-              sliderInput("var2",labelMandatory("how many times do you clean between your teeth, using an interdental cleaner (like floss) per week?"),0,56,1,ticks=FALSE),
+              sliderInput("var2","how many times do you clean between your teeth, using an interdental cleaner (like floss) per week?",0,56,1,ticks=FALSE),
               numericInput("min_floss","How long on average have you been cleaning between your teeth using an interdental cleaner (like floss) for each time? (in minutes)",value=1), 
               
-              numericInput("age", labelMandatory("How old are you?"),value="none"),
+              numericInput("age", "How old are you?",value="none"),
               
               
               
-              selectInput("gender",labelMandatory("Gender"),choices=list("Female"=1,"Male"=2,"Other/Prefer not to say"=3),selected=1),
+              selectInput("gender","Gender",choices=list("Female"=1,"Male"=2,"Other/Prefer not to say"=3),selected=1),
              
               radioButtons("visit_freq1", "When did you last visit a dentist about your teeth, dentures or gums?",
                            choices = list("Less than 1 year ago" = 1, "1 to less than 2 years ago"=2, "2 or more years ago" = 3,"I have never attended"=4, "I can't remember"=5),selected = 5),
@@ -50,7 +63,7 @@ ui <- fluidPage(
           )
       ),
       div(class = "page",
-          id = paste0("step", 2),
+          id = paste0("step", 3),
           column(12,align="center",tags$h1("Demographics Part B")),
           sidebarLayout(
             sidebarPanel(
@@ -77,94 +90,111 @@ ui <- fluidPage(
       ),
             
       div(class = "page",
-          id = paste0("step", 3),
-          column(12,align="left",tags$h1("First choice")),
+          id = paste0("step", 4),
+          column(12,align="left",tags$h1("Choice 1")),
           br(),
           fluidRow(
-          column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
+          column(12,align="left",tags$h4("For each scenario below we would like you to imagine you are going to register with a",tags$b("new"), "dental practice for a first time. You will be given options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices", tags$b("and you will be required to choose"), "which you would like to register with", tags$b("based on the options presented."), "Here follows a table describing the changing options for the dental practices. Please read through the table before answering the questions.")),
           br(),
-          column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
+          column(12,align="left",tags$img(height=400, width=850, src="descriptions.png")),
+          br(),
+          column(12,align="left",tags$h4("In the question below, imagine you are going to register with a", tags$b("new dental practice."), "You will be shown the options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices. Based on these options, you should choose which practice you would register with. Imagine there are no options available apart from the two practices shown. In both practices you will initially see the dentist for a scale and polish which will take about 15 minutes. The only variation between practices is in the options below.", tags$b("Which dental practice would you choose?")))
+         
           ),
           choiceDataTableUI("one")
       ),
       div(class = "page",
-          id = paste0("step", 4),
-          column(12,align="left",tags$h1("Second choice")),
+          id = paste0("step", 5),
+          column(12,align="left",tags$h1("Choice 2")),
           br(),
           fluidRow(
-            column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
+            column(12,align="left",tags$h4("For each scenario below we would like you to imagine you are going to register with a",tags$b("new"), "dental practice for a first time. You will be given options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices", tags$b("and you will be required to choose"), "which you would like to register with", tags$b("based on the options presented."), "Here follows a table describing the changing options for the dental practices. Please read through the table before answering the questions.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png")),
+            br(),
+            column(12,align="left",tags$h4("In the question below, imagine you are going to register with a", tags$b("new dental practice."), "You will be shown the options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices. Based on these options, you should choose which practice you would register with. Imagine there are no options available apart from the two practices shown. In both practices you will initially see the dentist for a scale and polish which will take about 15 minutes. The only variation between practices is in the options below.", tags$b("Which dental practice would you choose?")))
           ),
           choiceDataTableUI("two")
       ),
       div(class = "page",
-          id = paste0("step", 5),
-          column(12,align="left",tags$h1("Third choice")),
+          id = paste0("step", 6),
+          column(12,align="left",tags$h1("Choice 3")),
           br(),
           fluidRow(
-            column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
+            column(12,align="left",tags$h4("For each scenario below we would like you to imagine you are going to register with a",tags$b("new"), "dental practice for a first time. You will be given options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices", tags$b("and you will be required to choose"), "which you would like to register with", tags$b("based on the options presented."), "Here follows a table describing the changing options for the dental practices. Please read through the table before answering the questions.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png")),
+            br(),
+            column(12,align="left",tags$h4("In the question below, imagine you are going to register with a", tags$b("new dental practice."), "You will be shown the options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices. Based on these options, you should choose which practice you would register with. Imagine there are no options available apart from the two practices shown. In both practices you will initially see the dentist for a scale and polish which will take about 15 minutes. The only variation between practices is in the options below.", tags$b("Which dental practice would you choose?")))
           ),
           choiceDataTableUI("three")
       ),
       div(class = "page",
-          id = paste0("step", 6),
-          column(12,align="left",tags$h1("Fourth choice")),
+          id = paste0("step", 7),
+          column(12,align="left",tags$h1("Choice 4")),
           br(),
           fluidRow(
-            column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
+            column(12,align="left",tags$h4("For each scenario below we would like you to imagine you are going to register with a",tags$b("new"), "dental practice for a first time. You will be given options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices", tags$b("and you will be required to choose"), "which you would like to register with", tags$b("based on the options presented."), "Here follows a table describing the changing options for the dental practices. Please read through the table before answering the questions.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png")),
+            br(),
+            column(12,align="left",tags$h4("In the question below, imagine you are going to register with a", tags$b("new dental practice."), "You will be shown the options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices. Based on these options, you should choose which practice you would register with. Imagine there are no options available apart from the two practices shown. In both practices you will initially see the dentist for a scale and polish which will take about 15 minutes. The only variation between practices is in the options below.", tags$b("Which dental practice would you choose?")))
           ),
           choiceDataTableUI("four")
       ),
       
       div(class = "page",
-          id = paste0("step", 7),
-          column(12,align="left",tags$h1("Fifth choice")),
+          id = paste0("step", 8),
+          column(12,align="left",tags$h1("Choice 5")),
           br(),
           fluidRow(
-            column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
+            column(12,align="left",tags$h4("For each scenario below we would like you to imagine you are going to register with a",tags$b("new"), "dental practice for a first time. You will be given options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices", tags$b("and you will be required to choose"), "which you would like to register with", tags$b("based on the options presented."), "Here follows a table describing the changing options for the dental practices. Please read through the table before answering the questions.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png")),
+            br(),
+            column(12,align="left",tags$h4("In the question below, imagine you are going to register with a", tags$b("new dental practice."), "You will be shown the options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices. Based on these options, you should choose which practice you would register with. Imagine there are no options available apart from the two practices shown. In both practices you will initially see the dentist for a scale and polish which will take about 15 minutes. The only variation between practices is in the options below.", tags$b("Which dental practice would you choose?")))
           ),
           choiceDataTableUI("five")
       ),
       div(class = "page",
-          id = paste0("step", 8),
-          column(12,align="left",tags$h1("Sixth choice")),
+          id = paste0("step", 9),
+          column(12,align="left",tags$h1("Choice 6")),
           br(),
           fluidRow(
-            column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
+            column(12,align="left",tags$h4("For each scenario below we would like you to imagine you are going to register with a",tags$b("new"), "dental practice for a first time. You will be given options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices", tags$b("and you will be required to choose"), "which you would like to register with", tags$b("based on the options presented."), "Here follows a table describing the changing options for the dental practices. Please read through the table before answering the questions.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png")),
+            br(),
+            column(12,align="left",tags$h4("In the question below, imagine you are going to register with a", tags$b("new dental practice."), "You will be shown the options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices. Based on these options, you should choose which practice you would register with. Imagine there are no options available apart from the two practices shown. In both practices you will initially see the dentist for a scale and polish which will take about 15 minutes. The only variation between practices is in the options below.", tags$b("Which dental practice would you choose?")))
           ),
           choiceDataTableUI("six")
       ),
       div(class = "page",
-          id = paste0("step", 9),
-          column(12,align="left",tags$h1("Seventh choice")),
+          id = paste0("step", 10),
+          column(12,align="left",tags$h1("Choice 7")),
           br(),
           fluidRow(
-            column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
+            column(12,align="left",tags$h4("For each scenario below we would like you to imagine you are going to register with a",tags$b("new"), "dental practice for a first time. You will be given options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices", tags$b("and you will be required to choose"), "which you would like to register with", tags$b("based on the options presented."), "Here follows a table describing the changing options for the dental practices. Please read through the table before answering the questions.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=850, src="descriptions.png")),
+            br(),
+            column(12,align="left",tags$h4("In the question below, imagine you are going to register with a", tags$b("new dental practice."), "You will be shown the options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices. Based on these options, you should choose which practice you would register with. Imagine there are no options available apart from the two practices shown. In both practices you will initially see the dentist for a scale and polish which will take about 15 minutes. The only variation between practices is in the options below.", tags$b("Which dental practice would you choose?")))
           ),
           choiceDataTableUI("seven")
       ),
       div(class = "page",
-          id = paste0("step", 10),
+          id = paste0("step", 11),
           fluidPage(
             div(
               id="lastpage",
-          column(12,align="left",tags$h1("Eighth choice")),
+          column(12,align="left",tags$h1("Choice 8")),
           br(),
           fluidRow(
-            column(12,align="left",tags$h4("In each of the questions below, imagine you are going to register with a dental practice. You will be shown the features of a typical",tags$b("check-up appointment"), "for two",tags$b("hypothetical"),"dental practices. Based on these features, you should choose which you would register with. Imagine there are no options available apart from the two practices shown. Assume also that in both practices you will initially see the dentist for scaling and polishing of 20 minutes and hence practices vary only on", tags$b("the described features."),"The descriptions of features are presented on the table below.")),
+            column(12,align="left",tags$h4("For each scenario below we would like you to imagine you are going to register with a",tags$b("new"), "dental practice for a first time. You will be given options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices", tags$b("and you will be required to choose"), "which you would like to register with", tags$b("based on the options presented."), "Here follows a table describing the changing options for the dental practices. Please read through the table before answering the questions.")),
             br(),
-            column(12,align="left",tags$img(height=400, width=800, src="descriptions.png"))
+            column(12,align="left",tags$img(height=400, width=800, src="descriptions.png")),
+            br(),
+            column(12,align="left",tags$h4("In the question below, imagine you are going to register with a", tags$b("new dental practice."), "You will be shown the options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices. Based on these options, you should choose which practice you would register with. Imagine there are no options available apart from the two practices shown. In both practices you will initially see the dentist for a scale and polish which will take about 15 minutes. The only variation between practices is in the options below.", tags$b("Which dental practice would you choose?")))
           ),
           
 

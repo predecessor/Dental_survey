@@ -104,7 +104,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 3) {
+    if(rv$page == 4) {
       if(length(a1()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -115,7 +115,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 4) {
+    if(rv$page == 5) {
       if(length(a2()) == 0 ) {
         disable(id = "nextBtn")
         return()
@@ -126,7 +126,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 5) {
+    if(rv$page == 6) {
       if(length(a3()) == 0 ) {
         disable(id = "nextBtn")
         return()
@@ -137,7 +137,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 6) {
+    if(rv$page == 7) {
       if(length(a4()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -148,7 +148,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 7) {
+    if(rv$page == 8) {
       if(length(a5()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -159,7 +159,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 8) {
+    if(rv$page == 9) {
       if(length(a6()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -170,7 +170,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 9) {
+    if(rv$page == 10) {
       if(length(a7()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -181,7 +181,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 10) {
+    if(rv$page == 11) {
       if(length(a8()) == 0) {
         disable(id = "submit")
         
@@ -304,18 +304,18 @@ output$distPlot<-renderPlot({
     }
   })
   
-  observe({
-    # check if all mandatory fields have a value
-    mandatoryFilled <-
-      vapply(fieldsMandatory,
-             function(x) {
-               !is.null(input[[x]]) && input[[x]] != ""
-             },
-             logical(1))
-    mandatoryFilled <- all(mandatoryFilled)
+  #observe({
+    
+    #mandatoryFilled <-
+      #vapply(fieldsMandatory,
+             #function(x) {
+               #!is.null(input[[x]]) && input[[x]] != ""
+             #},
+             #logical(1))
+    #mandatoryFilled <- all(mandatoryFilled)
     # enable/disable the submit button
-    shinyjs::toggleState(id = "nextBtn", condition = mandatoryFilled)
-  })
+   # shinyjs::toggleState(id = "nextBtn", condition = mandatoryFilled)
+  #})
   
   formData <- reactive({
     data <- sapply(fieldsAll, function(x) input[[x]])

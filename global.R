@@ -35,7 +35,7 @@ source("choiceDataTable.R")
 #source("likertQuestions.R")
 
 
-NUM_PAGES <- 10
+NUM_PAGES <- 11
 
 #likert_questions <- paste("Question", 1:12)
 #Anx_questions<-paste("Question", 1:4)
@@ -49,17 +49,17 @@ NUM_PAGES <- 10
 
 
 
-fieldsMandatory <- c("age", "gender")
+#fieldsMandatory <- c("age", "gender")
 
-labelMandatory <- function(label) {
-  tagList(
-    label,
-    span("*", class = "mandatory_star")
-  )
-}
+#labelMandatory <- function(label) {
+  #tagList(
+    #label,
+    #span("*", class = "mandatory_star")
+  #)
+#}
 
-appCSS <-
-  ".mandatory_star { color: red; }"
+# appCSS <-
+#  ".mandatory_star { color: red; }"
 
 fieldsAll <- c("var1","min_brush","var2","min_floss","age","gender","visit_freq1","visit_freq2","visit_reason","text1","alchohol","ethnicity","text2","oral_condition","visit_pay","visit_dread","smoking_status","education","region")
 responsesDir <- file.path("responses")
