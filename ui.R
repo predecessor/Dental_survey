@@ -28,7 +28,7 @@ ui <- fluidPage(
           br(),
           column(12, align="left",tags$h5(" The interrupted lines of the graph below will show you where you lie across all survey participants' oral health behaviour or in other words how compliant your oral health profile is", tags$b("(the more on the right the better!)"), "After answering the first four questions check your graph and the popped up message! Are you a master of oral health behaviour?")),
           br(),
-          column(12, align="left",tags$h5("Download, rename adding the .png extension and share your graph with your Facebook friends to show them how much you have mastered oral health preventive behaviour! Continue with the following questions.")), 
+          column(12, align="left",tags$h5("Download, rename, save and share your graph with your Facebook friends to show them how much you have mastered oral health preventive behaviour! Continue with the following questions.")), 
           br(),
           
           
