@@ -67,20 +67,20 @@ assign_blocks <- function(n) {
   #r <- runif(1)
   #if(r > 0.5) {
   if(n == 1) {
-    return(readRDS("Model1.rds"))
+    return(readRDS("Model-1.rds"))
   }else if(n==2) {
-    return(readRDS("Model2.rds"))
+    return(readRDS("Model-2.rds"))
   }
   else if(n==3){
-    return(readRDS("Model3.rds"))
+    return(readRDS("Model-3.rds"))
   }
   
-  else if(n==4) {return(readRDS("Model4.rds"))}
-  else if(n==5){return(readRDS("Model5.rds"))}
-  else if(n==6){return(readRDS("Model6.rds"))}
-  else if(n==7){return(readRDS("Model7.rds"))}
-  else if(n==8){return(readRDS("Model8.rds"))}
-  else{return(readRDS("Model9.rds"))}
+  else if(n==4) {return(readRDS("Model-4.rds"))}
+  else if(n==5){return(readRDS("Model-5.rds"))}
+  else if(n==6){return(readRDS("Model-6.rds"))}
+  else if(n==7){return(readRDS("Model-7.rds"))}
+  else if(n==8){return(readRDS("Model-8.rds"))}
+  else{return(readRDS("Model-9.rds"))}
   
 }
 
@@ -97,7 +97,7 @@ server <- function(input, output, session) {
   rv <- reactiveValues(page = 1)
   
   observe({
-    toggleState(id = "prevBtn", condition = rv$page > 1 &  rv$page < NUM_PAGES)
+    toggleState(id = "prevBtn", condition = rv$page > 1 || rv$page == NUM_PAGES &  rv$page < NUM_PAGES )
     toggleState(id = "nextBtn", condition = rv$page < NUM_PAGES)
     hide(selector = ".page")
     show(sprintf("step%s", rv$page))
@@ -183,15 +183,16 @@ server <- function(input, output, session) {
   observe({
     if(rv$page == 11) {
       if(length(a8()) == 0) {
-        disable(id = "submit")
+        disable(id = "nextBtn")
         
         return()
       }  else {
-        enable(id = "submit")
+        enable(id = "nextBtn")
         
       }
     }
   })
+  
   
   navPage <- function(direction) {
     rv$page <- rv$page + direction
@@ -267,18 +268,18 @@ output$distPlot<-renderPlot({
   
   selectedTitle<-reactive({
     if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25)})) {
-      print("You are among the 25 percent LEAST preventive people")}
+      print("You are among the 25 percent LEAST preventive people", justify="left")}
     else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)})){
-      print("You are among the 50 percent LEAST preventive people")
+      print("You are among the 50 percent LEAST preventive people", justify="left")
     }
     else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)})){
-      print("You are among the 50 percent MOST preventive people")
+      print("You are among the 50 percent of MOST preventive people", justify="left")
     }
     else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
-      print("WoW! You are among the 25 percent MOST preventive people")
+      print("You are among the 25 percent of MOST preventive people!", justify="left")
     }
     else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
-      print("Wow! You are a master of prevention among the 10 percent MOST preventive people")
+      print("You are among the 10 percent of MOST preventive people!", justify="left")
     }
   })
 
@@ -351,6 +352,8 @@ output$distPlot<-renderPlot({
     
     shinyjs::show("thankyou_msg")
     shinyjs::hide("pager")
+    disable("prevBtn")
+    
   })
   
   

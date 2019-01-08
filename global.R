@@ -35,7 +35,7 @@ source("choiceDataTable.R")
 #source("likertQuestions.R")
 
 
-NUM_PAGES <- 11
+NUM_PAGES <- 12
 
 #likert_questions <- paste("Question", 1:12)
 #Anx_questions<-paste("Question", 1:4)
@@ -61,7 +61,7 @@ NUM_PAGES <- 11
 # appCSS <-
 #  ".mandatory_star { color: red; }"
 
-fieldsAll <- c("var1","min_brush","var2","min_floss","age","gender","visit_freq1","visit_freq2","visit_reason","text1","alchohol","ethnicity","text2","oral_condition","visit_pay","visit_dread","smoking_status","education","region")
+fieldsAll <- c("var1","min_brush","var2","min_floss","age","gender","visit_freq1","visit_freq2","visit_reason","text1","alchohol","ethnicity","text2","oral_condition","visit_pay","visit_dread","smoking_status","education","sug_bev","working_status","profession","region","Eng.region","Scot.city","Wal.city","Ire.city","Feed1","Feed2","Feed3","Feed4","Feed5","Feed6","Feed7","Feed8")
 responsesDir <- file.path("responses")
 epochTime <- function() {
   as.integer(Sys.time())
@@ -78,9 +78,6 @@ dat.frame.new<-mutate(dat.frame,brushing_intensity=dat.frame$var1*dat.frame$min_
 quantile(dat.frame.new$both_intensities,prob=0.5)
 
 dat.count<-as.data.frame(count(dat.frame.new,dat.frame.new$oral_condition))
-
-
-
 
 
 
