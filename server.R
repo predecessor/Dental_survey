@@ -268,18 +268,18 @@ output$distPlot<-renderPlot({
   
   selectedTitle<-reactive({
     if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25)})) {
-      print("You are among the 25 percent LEAST preventive people", justify="left")}
+      print("Being in the lowest 25% of preventive behaviour", justify="left")}
     else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)})){
-      print("You are among the 50 percent LEAST preventive people", justify="left")
+      print("Being in the lowest 50% of preventive behaviour", justify="left")
     }
     else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)})){
-      print("You are among the 50 percent of MOST preventive people", justify="left")
+      print("Being in the highest 50% of preventive behaviour", justify="left")
     }
     else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
-      print("You are among the 25 percent of MOST preventive people!", justify="left")
+      print("Being in the highest 25% of preventive behaviour", justify="left")
     }
     else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
-      print("You are among the 10 percent of MOST preventive people!", justify="left")
+      print("Being in the highest 10% of preventive behaviour", justify="left")
     }
   })
 
