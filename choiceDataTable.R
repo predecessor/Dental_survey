@@ -12,9 +12,15 @@ choiceDataTableUI <- function(id) {
 choiceDataTable <- function(input, output, session, data) {
   ns <- session$ns
   
-  output$dt <- DT::renderDataTable(data, rownames = TRUE,
-                                   selection = list(mode = "single", target = "column"),
-                                   options = list(dom = "t"))
+  output$dt <- DT::renderDataTable({
+    datatable(
+      data,
+      rownames = TRUE,
+      class = "compact display",
+      selection = list(mode = "single", target = "column"),
+      options = list(dom = "t")
+    )
+  })
   
   
   proxy = dataTableProxy("dt")
