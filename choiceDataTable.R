@@ -16,6 +16,7 @@ choiceDataTable <- function(input, output, session, data) {
                                    selection = list(mode = "single", target = "column"),
                                    options = list(dom = "t"))
   
+  
   proxy = dataTableProxy("dt")
   
   observeEvent(input$r, {
@@ -50,3 +51,4 @@ choiceDataTable <- function(input, output, session, data) {
   
   return(reactive(input$dt_columns_selected + 1))
 }
+
