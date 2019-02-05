@@ -2,13 +2,13 @@
 
 #install.packages("modeest")
 #install.packages(c("reshape","RcolorBrewer","ggthemes","stringr"))
-#install.packages("dplyr")
+
 
 #install.packages("tidyr")
-#install.packages("data.table")
-#install.packages("choiceDes","data.table","conjoint")
-#install.packages("httpuv")
+
 #install.packages("choiceDes")
+#install.packages("httpuv")
+
 
 library(httpuv)
 library(modeest)
@@ -32,36 +32,36 @@ library(data.table)
 
 
 source("choiceDataTable.R")
-source("likertQuestions.R")
+#source("likertQuestions.R")
 
 
-NUM_PAGES <- 11
+NUM_PAGES <- 12
 
-likert_questions <- paste("Question", 1:12)
-Anx_questions<-paste("Question", 1:4)
-
-
-likert_choices <- c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree")
-levelanx_choices<-c("Not Anxious","Slightly Anxious","Fairly Anxious","Very Anxious", "Extremely Anxious")
+#likert_questions <- paste("Question", 1:12)
+#Anx_questions<-paste("Question", 1:4)
 
 
-
+#likert_choices <- c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree")
+#levelanx_choices<-c("Not Anxious","Slightly Anxious","Fairly Anxious","Very Anxious", "Extremely Anxious")
 
 
 
-fieldsMandatory <- c("var1", "var2")
 
-labelMandatory <- function(label) {
-  tagList(
-    label,
-    span("*", class = "mandatory_star")
-  )
-}
 
-appCSS <-
-  ".mandatory_star { color: red; }"
 
-fieldsAll <- c("var1","min_brush","var2","min_floss","age","ethnicity","gender","education","visit_freq","oral_condition","occupation","alcohol","region")
+#fieldsMandatory <- c("age", "gender")
+
+#labelMandatory <- function(label) {
+  #tagList(
+    #label,
+    #span("*", class = "mandatory_star")
+  #)
+#}
+
+# appCSS <-
+#  ".mandatory_star { color: red; }"
+
+fieldsAll <- c("var1","min_brush","var2","min_floss","age","gender","visit_freq1","visit_freq2","visit_reason","text1","alchohol","ethnicity","text2","oral_condition","visit_pay","visit_dread","smoking_status","education","sug_bev","working_status","profession","region","Eng.region","Scot.city","Wal.city","Ire.city","Feed1","Feed2","Feed3","Feed4","Feed5","Feed6","Feed7","Feed8")
 responsesDir <- file.path("responses")
 epochTime <- function() {
   as.integer(Sys.time())
@@ -76,6 +76,19 @@ dat.frame
 
 dat.frame.new<-mutate(dat.frame,brushing_intensity=dat.frame$var1*dat.frame$min_brush,flossing_intensity=dat.frame$var2*dat.frame$min_floss,both_intensities=dat.frame$var1*dat.frame$min_brush+dat.frame$var2*dat.frame$min_floss)
 quantile(dat.frame.new$both_intensities,prob=0.5)
+
+dat.count<-as.data.frame(count(dat.frame.new,dat.frame.new$oral_condition))
+
+
+
+
+
+
+
+
+
+
+
 
 
 

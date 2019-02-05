@@ -67,20 +67,20 @@ assign_blocks <- function(n) {
   #r <- runif(1)
   #if(r > 0.5) {
   if(n == 1) {
-    return(readRDS("model1.data.rds"))
+    return(readRDS("Model-1.rds"))
   }else if(n==2) {
-    return(readRDS("model2.data.rds"))
+    return(readRDS("Model-2.rds"))
   }
   else if(n==3){
-    return(readRDS("model3.data.rds"))
+    return(readRDS("Model-3.rds"))
   }
   
-  else if(n==4) {return(readRDS("model4.data.rds"))}
-  else if(n==5){return(readRDS("model5.data.rds"))}
-  else if(n==6){return(readRDS("model6.data.rds"))}
-  else if(n==7){return(readRDS("model7.data.rds"))}
-  else if(n==8){return(readRDS("model8.data.rds"))}
-  else{return(readRDS("model9.data.rds"))}
+  else if(n==4) {return(readRDS("Model-4.rds"))}
+  else if(n==5){return(readRDS("Model-5.rds"))}
+  else if(n==6){return(readRDS("Model-6.rds"))}
+  else if(n==7){return(readRDS("Model-7.rds"))}
+  else if(n==8){return(readRDS("Model-8.rds"))}
+  else{return(readRDS("Model-9.rds"))}
   
 }
 
@@ -97,14 +97,14 @@ server <- function(input, output, session) {
   rv <- reactiveValues(page = 1)
   
   observe({
-    toggleState(id = "prevBtn", condition = rv$page > 1)
+    toggleState(id = "prevBtn", condition = rv$page > 1 || rv$page == NUM_PAGES &  rv$page < NUM_PAGES )
     toggleState(id = "nextBtn", condition = rv$page < NUM_PAGES)
     hide(selector = ".page")
     show(sprintf("step%s", rv$page))
   })
   
   observe({
-    if(rv$page == 2) {
+    if(rv$page == 4) {
       if(length(a1()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -115,7 +115,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 3) {
+    if(rv$page == 5) {
       if(length(a2()) == 0 ) {
         disable(id = "nextBtn")
         return()
@@ -126,7 +126,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 4) {
+    if(rv$page == 6) {
       if(length(a3()) == 0 ) {
         disable(id = "nextBtn")
         return()
@@ -137,7 +137,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 5) {
+    if(rv$page == 7) {
       if(length(a4()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -148,7 +148,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 6) {
+    if(rv$page == 8) {
       if(length(a5()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -159,7 +159,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 7) {
+    if(rv$page == 9) {
       if(length(a6()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -170,7 +170,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 8) {
+    if(rv$page == 10) {
       if(length(a7()) == 0) {
         disable(id = "nextBtn")
         return()
@@ -181,15 +181,18 @@ server <- function(input, output, session) {
   })
   
   observe({
-    if(rv$page == 9) {
+    if(rv$page == 11) {
       if(length(a8()) == 0) {
         disable(id = "nextBtn")
+        
         return()
       }  else {
         enable(id = "nextBtn")
+        
       }
     }
   })
+  
   
   navPage <- function(direction) {
     rv$page <- rv$page + direction
@@ -212,7 +215,10 @@ myPlot <- function(){
     How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
     ggplot(How_preventive_am_i, aes(x=value,color=type,fill=type,alpha=0.6)) +
       scale_fill_manual(values=c("red","blue"))+
-      #geom_line()+
+        
+      ggtitle(selectedTitle())+
+      #coord_flip() +
+      theme_bw(16)+
       geom_density(adjust=5)+
       
       geom_vline(xintercept =x(),linetype="dashed",colour="red")+
@@ -222,6 +228,19 @@ myPlot <- function(){
 output$distPlot<-renderPlot({
   myPlot()
 })
+  mySecondPlot<-function(){
+    
+      ggplot(dat.frame.new, aes(x=oral_condition, fill="steelblue")) +
+      geom_bar(stat="count")+
+      theme_minimal()+
+      scale_x_discrete(limits=c("None left", "Poor","Average","Good","Excellent"))+
+      geom_vline(xintercept =as.numeric(input$oral_condition),linetype="dashed",colour="blue")
+  }
+    
+   
+  output$SecondDistPlot<-renderPlot({
+    mySecondPlot() 
+  })
   
     
     
@@ -229,35 +248,82 @@ output$distPlot<-renderPlot({
   input$var1*input$min_brush+input$var2*input$min_floss
   })
   
-  output$message <- renderPrint({
-    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.5)})) {
-     print("You belong to the 50 percent LEAST preventive people")
+  output$message1 <- renderPrint({
+    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25)})) {
+     print("You belong to the 25 percent LEAST preventive part of the population")}
+      else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)})){
+        print("You belong to the 50 percent LEAST preventive part of the population")
+      }
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)})){
+      print("You belong to the 50 percent MOST preventive part of the population")
     }
-    else {
-      print("You belong to the 50 percent MOST preventive people")
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+      print("WoW! You belong to the 25 percent MOST preventive part of the population")
+    }
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+      print("Wow! You are a master of prevention belonging to the 10 percent MOST preventive part of the population")
     }
     
   })
   
-  observe({
-    # check if all mandatory fields have a value
-    mandatoryFilled <-
-      vapply(fieldsMandatory,
-             function(x) {
-               !is.null(input[[x]]) && input[[x]] != ""
-             },
-             logical(1))
-    mandatoryFilled <- all(mandatoryFilled)
-    # enable/disable the submit button
-    shinyjs::toggleState(id = "submit", condition = mandatoryFilled)
+  selectedTitle<-reactive({
+    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25)})) {
+      print("Being in the lowest 25% of preventive behaviour", justify="left")}
+    else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)})){
+      print("Being in the lowest 50% of preventive behaviour", justify="left")
+    }
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)})){
+      print("Being in the highest 50% of preventive behaviour", justify="left")
+    }
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+      print("Being in the highest 25% of preventive behaviour", justify="left")
+    }
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+      print("Being in the highest 10% of preventive behaviour", justify="left")
+    }
   })
+
+  
+  
+  #graph2.data<-reactive({input$oral_condition})
+  
+  output$message2 <- renderPrint({
+    if (input$oral_condition==1){
+    print(paste0("You belong to the ",as.integer((dat.count[1,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is extremely poor")) 
+    }
+    else if (input$oral_condition==2){
+      print(paste0("You belong to the ",as.integer((dat.count[2,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is poor")) 
+    }
+   else if (input$oral_condition==3){
+      print(paste0("You belong to the ",as.integer((dat.count[3,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is average")) 
+    }
+    else if (input$oral_condition==4){
+      print(paste0("You belong to the ",as.integer((dat.count[4,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is good")) 
+   }
+    else if (input$oral_condition==5){
+      print(paste0("You belong to the ",as.integer((dat.count[5,2]/nrow(dat.frame.new))*100)," percent of participants who think that their oral health is excellent")) 
+    }
+  })
+  
+  #observe({
+    
+    #mandatoryFilled <-
+      #vapply(fieldsMandatory,
+             #function(x) {
+               #!is.null(input[[x]]) && input[[x]] != ""
+             #},
+             #logical(1))
+    #mandatoryFilled <- all(mandatoryFilled)
+    # enable/disable the submit button
+   # shinyjs::toggleState(id = "nextBtn", condition = mandatoryFilled)
+  #})
   
   formData <- reactive({
     data <- sapply(fieldsAll, function(x) input[[x]])
     data <- c(data, choice1 = a1(), choice2 = a2(), choice3 = a3(),
               choice4 = a4(), choice5 = a5(), choice6 = a6(),
               
-              choice7 = a7(), choice8 = a8(), likerts(),levelanxes(),block=print(n))
+              choice7 = a7(), choice8 = a8(), block=print(n))
     
     data <- c(data, timestamp = epochTime())
     data <- t(data)
@@ -281,12 +347,19 @@ output$distPlot<-renderPlot({
   observeEvent(input$submit, {
     saveData(formData())
     
-    shinyjs::hide("levelanx_input")
+    shinyjs::hide("lastpage")
     
     
     shinyjs::show("thankyou_msg")
     shinyjs::hide("pager")
+    disable("prevBtn")
+    
   })
+  
+  
+  #observe({
+    #toggle(id = "last page choice", condition =input$submit )
+  #})
   
   # 
   # a1 <- callModule(choiceDataTable, "one", d1)
@@ -309,30 +382,30 @@ output$distPlot<-renderPlot({
   a7 <- callModule(choiceDataTable, "seven", alts[[7]])
   a8 <- callModule(choiceDataTable, "eight", alts[[8]])
   
-  likerts <- callModule(likertQuestions, "likert")
-  
-  #levelanxes <- callModule(levelanxQuestions,"levelanx")
-  levelanxes <- callModule(likertQuestions,"levelanx")
+  #likerts <- callModule(likertQuestions, "likert")
   
   
-  output$likert_plot <- renderPlot({
-    likert_frame <- dat.frame[, grepl("likert", names(dat.frame))]
-    likert_frame[ ,1:12] <- lapply(likert_frame[,1:12], function(x) factor(x, levels = likert_choices))
+  #levelanxes <- callModule(likertQuestions,"levelanx")
+  
+  
+  #output$likert_plot <- renderPlot({
+    #likert_frame <- dat.frame[, grepl("likert", names(dat.frame))]
+    #likert_frame[ ,1:12] <- lapply(likert_frame[,1:12], function(x) factor(x, levels = likert_choices))
     
-    names(likert_frame) <- likert_questions
+    #names(likert_frame) <- likert_questions
     
-    likert_summ <- likert(likert_frame[ ,1:12])
-    plot(likert_summ, group.order = likert_questions)
-  })
+    #likert_summ <- likert(likert_frame[ ,1:12])
+    #plot(likert_summ, group.order = likert_questions)
+  #})
   
-  output$Anx_plot<-renderPlot({
-    Anx_frame <- dat.frame[, grepl("likert", names(dat.frame))] 
-    Anx_frame[ ,1:4] <- lapply(Anx_frame[ ,13:16], function(x) factor(x, levels = levelanx_choices))
-    names(Anx_frame)<- Anx_questions
+  #output$Anx_plot<-renderPlot({
+    #Anx_frame <- dat.frame[, grepl("likert", names(dat.frame))] 
+    #Anx_frame[ ,1:4] <- lapply(Anx_frame[ ,13:16], function(x) factor(x, levels = levelanx_choices))
+    #names(Anx_frame)<- Anx_questions
     
-    Anx_summ<-likert(Anx_frame[ ,1:4])
-    plot(Anx_summ, group.order=Anx_questions)
-  })
+    #Anx_summ<-likert(Anx_frame[ ,1:4])
+    #plot(Anx_summ, group.order=Anx_questions)
+  #})
   
   output$downloadfirstplot<-downloadHandler(
     filename=function(){
