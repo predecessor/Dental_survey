@@ -213,13 +213,13 @@ server <- function(input, output, session) {
 myPlot <- function(){
     
     How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
-    ggplot(How_preventive_am_i, aes(x=value,color=type,fill=type,alpha=0.6)) +
+    ggplot(How_preventive_am_i, aes(x=value,color=type,fill=type)) +
       scale_fill_manual(values=c("red","blue"))+
         
       ggtitle(selectedTitle())+
       #coord_flip() +
       theme_bw(16)+
-      geom_density(adjust=5)+
+      geom_density(adjust=5, alpha=0.6)+
       
       geom_vline(xintercept =x(),linetype="dashed",colour="red")+
       geom_vline(xintercept = y(),linetype="dashed",colour="blue")
