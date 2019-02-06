@@ -120,7 +120,7 @@ ui <- fluidPage(
           fluidRow(
           column(12,align="left",tags$h4("For each scenario below we would like you to imagine you are going to register with a",tags$b("new"), "dental practice for a first time. You will be given options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices", tags$b("and you will be required to choose"), "which you would like to register with", tags$b("based on the options presented."), "Here follows a table describing the changing options for the dental practices. Please read through the table before answering the questions.")),
           br(),
-          column(12,align="left",tags$img(height=400, width=850, src="descriptions.png")),
+          column(12,align="left",tags$img(height=400, width=850, src="descriptions.PNG")),
           br(),
           column(12,align="left",tags$h4("In the question below, imagine you are going to register with a", tags$b("new dental practice."), "You will be shown the options of a typical", tags$b("check-up appointment"), "for two", tags$b("hypothetical"), "dental practices.")),
           br(),

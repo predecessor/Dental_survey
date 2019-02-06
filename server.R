@@ -210,36 +210,53 @@ server <- function(input, output, session) {
     input$var2*input$min_floss
   })
   
-myPlot <- function(){
+  How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
+  base_plot1 <- ggplot(How_preventive_am_i, aes(x = value, color = type, fill = type)) + 
+    scale_fill_manual(values=c("red","blue")) +
+    theme_bw(16) +
+    geom_density(adjust=5, alpha=0.6)
+  
+  base_plot2 <- ggplot(dat.frame.new, aes(x = oral_condition, fill="steelblue")) +
+    geom_bar(stat="count") +
+    theme_minimal() +
+    scale_x_discrete(limits = c("None left", "Poor","Average","Good","Excellent"))
     
-    How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
-    ggplot(How_preventive_am_i, aes(x=value,color=type,fill=type,alpha=0.6)) +
-      scale_fill_manual(values=c("red","blue"))+
-        
-      ggtitle(selectedTitle())+
-      #coord_flip() +
-      theme_bw(16)+
-      geom_density(adjust=5)+
-      
-      geom_vline(xintercept =x(),linetype="dashed",colour="red")+
+  
+# myPlot <- function(){
+#     
+#     #How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
+#     ggplot(How_preventive_am_i, aes(x=value,color=type,fill=type)) +
+#       scale_fill_manual(values=c("red","blue"))+
+#         
+#       ggtitle(selectedTitle())+
+#       #coord_flip() +
+#       theme_bw(16)+
+#       geom_density(adjust=5, alpha=0.6)+
+#       
+#       geom_vline(xintercept =x(),linetype="dashed",colour="red")+
+#       geom_vline(xintercept = y(),linetype="dashed",colour="blue")
+# }
+  
+  output$distPlot<-renderPlot({
+    base_plot1 +
+      ggtitle(selectedTitle()) +
+      geom_vline(xintercept =x(),linetype="dashed",colour="red") +
       geom_vline(xintercept = y(),linetype="dashed",colour="blue")
-}
-
-output$distPlot<-renderPlot({
-  myPlot()
-})
-  mySecondPlot<-function(){
-    
-      ggplot(dat.frame.new, aes(x=oral_condition, fill="steelblue")) +
-      geom_bar(stat="count")+
-      theme_minimal()+
-      scale_x_discrete(limits=c("None left", "Poor","Average","Good","Excellent"))+
-      geom_vline(xintercept =as.numeric(input$oral_condition),linetype="dashed",colour="blue")
-  }
+  })
+  
+  # mySecondPlot<-function(){
+  #   
+  #     ggplot(dat.frame.new, aes(x=oral_condition, fill="steelblue")) +
+  #     geom_bar(stat="count")+
+  #     theme_minimal()+
+  #     scale_x_discrete(limits=c("None left", "Poor","Average","Good","Excellent"))+
+  #     geom_vline(xintercept =as.numeric(input$oral_condition),linetype="dashed",colour="blue")
+  # }
     
    
   output$SecondDistPlot<-renderPlot({
-    mySecondPlot() 
+    base_plot2 +
+      geom_vline(xintercept =as.numeric(input$oral_condition),linetype="dashed",colour="blue")
   })
   
     
