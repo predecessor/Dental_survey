@@ -210,38 +210,45 @@ server <- function(input, output, session) {
     input$var2*input$min_floss
   })
   
-  How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
-  base_plot1 <- ggplot(How_preventive_am_i, aes(x = value, color = type, fill = type)) + 
-    scale_fill_manual(values=c("red","blue")) +
-    theme_bw(16) +
-    geom_density(adjust=5, alpha=0.6)
+  #How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
+  #base_plot1 <- ggplot(How_preventive_am_i, aes(x = value, color = type, fill = type)) + 
+    #scale_fill_manual(values=c("red","blue")) +
+    #theme_bw(16) +
+    #geom_density(adjust=5, alpha=0.6) +
+    #ylab("Density of oral health prevention")
   
   base_plot2 <- ggplot(dat.frame.new, aes(x = oral_condition, fill="steelblue")) +
-    geom_bar(stat="count") +
-    theme_minimal() +
-    scale_x_discrete(limits = c("None left", "Poor","Average","Good","Excellent"))
+    geom_bar(aes(y = (..count..)/sum(..count..))) +
+
+     theme_minimal() +
+     scale_x_discrete(limits = c("None left", "Poor","Average","Good","Excellent")) +
+     ylab("Percentages of people for each category")
+  
+  
     
   
-# myPlot <- function(){
-#     
-#     #How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
-#     ggplot(How_preventive_am_i, aes(x=value,color=type,fill=type)) +
-#       scale_fill_manual(values=c("red","blue"))+
-#         
-#       ggtitle(selectedTitle())+
-#       #coord_flip() +
-#       theme_bw(16)+
-#       geom_density(adjust=5, alpha=0.6)+
-#       
-#       geom_vline(xintercept =x(),linetype="dashed",colour="red")+
-#       geom_vline(xintercept = y(),linetype="dashed",colour="blue")
-# }
+  myPlot <- function(){
+     
+      How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
+      ggplot(How_preventive_am_i, aes(x=value,color=type,fill=type)) +
+      scale_fill_manual(values=c("red","blue"))+
+        
+       ggtitle(selectedTitle())+
+       #coord_flip() +
+       theme_bw(16)+
+       geom_density(adjust=5, alpha=0.6)+
+       
+       geom_vline(xintercept =x(),linetype="dashed",colour="red")+
+       geom_vline(xintercept = y(),linetype="dashed",colour="blue")
+       #ylab("Density of oral health prevention")
+ }
   
   output$distPlot<-renderPlot({
-    base_plot1 +
-      ggtitle(selectedTitle()) +
-      geom_vline(xintercept =x(),linetype="dashed",colour="red") +
-      geom_vline(xintercept = y(),linetype="dashed",colour="blue")
+    myPlot()
+    #base_plot1 +
+      #ggtitle(selectedTitle()) +
+      #geom_vline(xintercept =x(),linetype="dashed",colour="red") +
+      #geom_vline(xintercept = y(),linetype="dashed",colour="blue")
   })
   
   # mySecondPlot<-function(){
@@ -285,18 +292,18 @@ server <- function(input, output, session) {
   
   selectedTitle<-reactive({
     if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25)})) {
-      print("Being in the lowest 25% of preventive behaviour", justify="left")}
+      print("I am in the lowest 25% of preventive behaviour", justify="left")}
     else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)})){
-      print("Being in the lowest 50% of preventive behaviour", justify="left")
+      print("I am in the lowest 50% of preventive behaviour", justify="left")
     }
     else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)})){
-      print("Being in the highest 50% of preventive behaviour", justify="left")
+      print("I am in the highest 50% of preventive behaviour", justify="left")
     }
     else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
-      print("Being in the highest 25% of preventive behaviour", justify="left")
+      print("I am in the highest 25% of preventive behaviour", justify="left")
     }
     else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
-      print("Being in the highest 10% of preventive behaviour", justify="left")
+      print("I am in the highest 10% of preventive behaviour", justify="left")
     }
   })
 
@@ -348,17 +355,28 @@ server <- function(input, output, session) {
   })
   
   
-  saveData <- function(data) {
-    fileName <- sprintf("%s_%s.csv",
-                        epochTime(),
-                        digest::digest(data))
+  #saveData <- function(data) {
+    #fileName <- sprintf("%s_%s.csv",
+                        #epochTime(),
+                        #digest::digest(data))
     
-    write.csv(
-      x = data,
-      file = file.path(responsesDir, fileName),
-      row.names = FALSE,
-      quote = TRUE
-    )
+    #write.csv(
+      #x = data,
+      #file = file.path(responsesDir, fileName),
+      #row.names = FALSE,
+      #quote = TRUE
+    #)
+  #}
+  
+  saveData <- function(data) {
+    #data <- t(data)
+    # Create a unique file name
+    fileName <- sprintf("%s_%s.csv", as.integer(Sys.time()), digest::digest(data))
+    # Write the data to a temporary file locally
+    filePath <- file.path(tempdir(), fileName)
+    write.csv(data, filePath, row.names = FALSE, quote = TRUE)
+    # Upload the file to Dropbox
+    drop_upload(filePath, path = outputDir)
   }
   
   observeEvent(input$submit, {

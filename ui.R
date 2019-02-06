@@ -15,8 +15,9 @@ ui <- fluidPage(
           br(),
           column(12, align="left",tags$h5("This questionnaire is organised into",tags$b(" two parts."),"The",tags$b("First part"), "asks you to provide some information about you, your perceived oral health and some behaviours related to that. ")),
           br(),
-          column(12, align="left",tags$h5("The", tags$b("second part"), "presents you with eight scenarios. You will then be asked in each scenario to select which dental practice you would like to register at for a",tags$b(" dental check-up appointment."),"For each scenario we would like you to imagine you are going to register with a", tags$b("new"), "dental practice for a first time. You will be given options of a", tags$b("typical check-up appointment"), "for two", tags$b("hypothetical"),"dental practices and",tags$b("you will be required to choose"),"which you would like to register with", tags$b("based on the options presented.")))
-          #br(),
+          column(12, align="left",tags$h5("The", tags$b("second part"), "presents you with eight scenarios. You will then be asked in each scenario to select which dental practice you would like to register at for a",tags$b(" dental check-up appointment."),"For each scenario we would like you to imagine you are going to register with a", tags$b("new"), "dental practice for a first time. You will be given options of a", tags$b("typical check-up appointment"), "for two", tags$b("hypothetical"),"dental practices and",tags$b("you will be required to choose"),"which you would like to register with", tags$b("based on the options presented."))),
+          br(),
+          column(12, align="left",tags$h5("Data of this survey will be stored in the researcher's personal dropbox file and will be fully anonymized before the analysis will take place."))
           ),
           
           mainPanel() 

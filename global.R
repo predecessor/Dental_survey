@@ -28,6 +28,7 @@ library(stringr)
 library(tidyr)
 library(choiceDes)
 library(data.table)
+library(rdrop2)
 
 
 
@@ -45,7 +46,7 @@ NUM_PAGES <- 12
 #levelanx_choices<-c("Not Anxious","Slightly Anxious","Fairly Anxious","Very Anxious", "Extremely Anxious")
 
 
-
+outputDir <- "responses"
 
 
 
@@ -62,16 +63,24 @@ NUM_PAGES <- 12
 #  ".mandatory_star { color: red; }"
 
 fieldsAll <- c("var1","min_brush","var2","min_floss","age","gender","visit_freq1","visit_freq2","visit_reason","text1","alchohol","ethnicity","text2","oral_condition","visit_pay","visit_dread","smoking_status","education","sug_bev","working_status","profession","region","Eng.region","Scot.city","Wal.city","Ire.city","Feed1","Feed2","Feed3","Feed4","Feed5","Feed6","Feed7","Feed8")
-responsesDir <- file.path("responses")
+#responsesDir <- file.path("responses")
 epochTime <- function() {
   as.integer(Sys.time())
 }
 
-responses_file_path <- file.path("responses", list.files("responses"))
-list_responses <- lapply(responses_file_path, read.csv)
-responses_df <- do.call(what = rbind, args = list_responses)
+#responses_file_path <- file.path("responses", list.files("responses"))
+#list_responses <- lapply(responses_file_path, read.csv)
+#responses_df <- do.call(what = rbind, args = list_responses)
 
-dat.frame<-as.data.frame(responses_df)
+filesInfo <- drop_dir(outputDir)
+filePaths <- filesInfo$path_lower   
+data <- lapply(filePaths, drop_read_csv, stringsAsFactors = FALSE)
+# Concatenate all data together into one data.frame
+data <- do.call(rbind, data)
+
+
+
+dat.frame<-as.data.frame(data)
 dat.frame
 
 dat.frame.new<-mutate(dat.frame,brushing_intensity=dat.frame$var1*dat.frame$min_brush,flossing_intensity=dat.frame$var2*dat.frame$min_floss,both_intensities=dat.frame$var1*dat.frame$min_brush+dat.frame$var2*dat.frame$min_floss)
