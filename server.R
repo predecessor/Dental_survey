@@ -229,7 +229,7 @@ server <- function(input, output, session) {
   
   myPlot <- function(){
      
-      How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity)
+      How_preventive_am_i<-gather(dat.frame.new,value="value",key="type",brushing_intensity,flossing_intensity, na.rm = TRUE)
       ggplot(How_preventive_am_i, aes(x=value,color=type,fill=type)) +
       scale_fill_manual(values=c("red","blue"))+
         
@@ -273,36 +273,36 @@ server <- function(input, output, session) {
   })
   
   output$message1 <- renderPrint({
-    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25)})) {
+    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25,na.rm = TRUE)})) {
      print("You belong to the 25 percent LEAST preventive part of the population")}
-      else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)})){
+      else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50,na.rm = TRUE)})){
         print("You belong to the 50 percent LEAST preventive part of the population")
       }
-    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)})){
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50,na.rm = TRUE)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75,na.rm = TRUE)})){
       print("You belong to the 50 percent MOST preventive part of the population")
     }
-    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75,na.rm = TRUE)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90,na.rm = TRUE)})){
       print("WoW! You belong to the 25 percent MOST preventive part of the population")
     }
-    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90,na.rm = TRUE)})){
       print("Wow! You are a master of prevention belonging to the 10 percent MOST preventive part of the population")
     }
     
   })
   
   selectedTitle<-reactive({
-    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25)})) {
+    if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.25,na.rm = TRUE)})) {
       print("I am in the lowest 25% of preventive behaviour", justify="left")}
-    else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)})){
+    else if (graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50,na.rm = TRUE)})){
       print("I am in the lowest 50% of preventive behaviour", justify="left")
     }
-    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)})){
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.50,na.rm = TRUE)}) &graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75,na.rm = TRUE)})){
       print("I am in the highest 50% of preventive behaviour", justify="left")
     }
-    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.75,na.rm = TRUE)}) & graph.data() <= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90,na.rm = TRUE)})){
       print("I am in the highest 25% of preventive behaviour", justify="left")
     }
-    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90)})){
+    else if (graph.data() >= isolate ({quantile(dat.frame.new$both_intensities,prob=0.90,na.rm = TRUE)})){
       print("I am in the highest 10% of preventive behaviour", justify="left")
     }
   })
@@ -351,9 +351,11 @@ server <- function(input, output, session) {
     
     data <- c(data, timestamp = epochTime())
     data <- t(data)
+   
     data
   })
   
+
   
   #saveData <- function(data) {
     #fileName <- sprintf("%s_%s.csv",
@@ -374,6 +376,7 @@ server <- function(input, output, session) {
     fileName <- sprintf("%s_%s.csv", as.integer(Sys.time()), digest::digest(data))
     # Write the data to a temporary file locally
     filePath <- file.path(tempdir(), fileName)
+    data<-rbind(df,data)
     write.csv(data, filePath, row.names = FALSE, quote = TRUE)
     # Upload the file to Dropbox
     drop_upload(filePath, path = outputDir)

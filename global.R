@@ -46,7 +46,7 @@ NUM_PAGES <- 12
 #levelanx_choices<-c("Not Anxious","Slightly Anxious","Fairly Anxious","Very Anxious", "Extremely Anxious")
 
 
-outputDir <- "responses"
+outputDir <- "experiment"
 
 
 
@@ -73,18 +73,27 @@ epochTime <- function() {
 #responses_df <- do.call(what = rbind, args = list_responses)
 
 filesInfo <- drop_dir(outputDir)
-filePaths <- filesInfo$path_lower   
-data <- lapply(filePaths, drop_read_csv, stringsAsFactors = FALSE)
+filePaths <- filesInfo$path_lower  
+
+
+df <- data.frame(var1=integer(),min_brush=integer(),var2=integer(),min_floss=integer(),age=integer(),gender=integer(),visit_freq1=integer(),visit_freq2=integer(),visit_reason=integer(),text1=character(),alchohol=integer(),ethnicity=integer(),text2=character(),oral_condition=integer(),visit_pay=integer(),visit_dread=integer(),smoking_status=integer(),education=integer(),sug_bev=integer(),working_status=integer(),profession=integer(),region=integer(),Eng.region=character(),Scot.city=character(),Wal.city=character(),Ire.city=character(),Feed1=integer(),Feed2=integer(),Feed3=integer(),Feed4=integer(),Feed5=character(),Feed6=character(),Feed7=character(),Feed8=character(),choice1=integer(),choice2=integer(),choice3=integer(),choice4=integer(),choice5=integer(),choice6=integer(),choice7=integer(),choice8=integer(),block=integer(),timestamp=integer(), stringsAsFactors=FALSE)
+df <- apply(df,2,as.character)
+
+data <-drop_read_csv(filePaths[length(filePaths)])
+#data <- lapply(filePaths, drop_read_csv, stringsAsFactors = FALSE)
+
 # Concatenate all data together into one data.frame
-data <- do.call(rbind, data)
+#data <- do.call(rbind, data )
+
+
 
 
 
 dat.frame<-as.data.frame(data)
-dat.frame
+df<-dat.frame
 
 dat.frame.new<-mutate(dat.frame,brushing_intensity=dat.frame$var1*dat.frame$min_brush,flossing_intensity=dat.frame$var2*dat.frame$min_floss,both_intensities=dat.frame$var1*dat.frame$min_brush+dat.frame$var2*dat.frame$min_floss)
-quantile(dat.frame.new$both_intensities,prob=0.5)
+quantile(dat.frame.new$both_intensities,prob=0.5,na.rm = TRUE)
 
 dat.count<-as.data.frame(count(dat.frame.new,dat.frame.new$oral_condition))
 
